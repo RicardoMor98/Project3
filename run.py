@@ -20,7 +20,17 @@ MISS = 'O'
 
 board = [[EMPTY for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
 
+# displaying the board
 
+def update_board(board, x, y, hit):
+    if hit:
+        board[x][y] = HIT
+    else:
+        board[x][y] = MISS
+
+def display_board(board):
+    for row in board:
+        print(' '.join(row))
 
 # placing the ships
 
