@@ -20,6 +20,8 @@ MISS = 'O'
 
 board = [[EMPTY for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
 
+
+
 # placing the ships
 
 def place_ship(board, x, y, length):
@@ -28,12 +30,24 @@ def place_ship(board, x, y, length):
             board[x+i][y] = SHIP
 
 def random_ship_placement(board):
-    import random
     for _ in range(5):  # Max 5 ships
         length = random.randint(1, 3)  # Max length 3
         x = random.randint(0, BOARD_SIZE - 1)
         y = random.randint(0, BOARD_SIZE - 1)
         place_ship(board, x, y, length)
+
+# coordinates guess
+
+def guess_coordinate(board, player):
+    while True:
+        try:
+            x, y = map(int, input(f"{player}, enter coordinates (row column): ").split())
+            if x >= 0 and x < BOARD_SIZE and y >= 0 and y < BOARD_SIZE:
+                return x, y
+            else:
+                print("Coordinates out of bounds. Try again.")
+        except ValueError:
+            print("Invalid input. Please enter numbers.")
 
 # game loop 
 
@@ -79,5 +93,5 @@ def game_loop(user_name):
 # run game
 
 if __name__ == "__main__":
-    user_name = get_user_name()
-    game_loop(user_name)
+    user_name = get_user_name()  # Get user name here
+    game_loop(user_name)  # Pass user_name to game_loop
