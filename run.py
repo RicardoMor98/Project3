@@ -75,3 +75,9 @@ def game_loop(user_name):
         if all(cell == HIT for row in board for cell in row):
             print(f"All your ships have been sunk, {user_name}!")
             break
+
+# run game
+
+if __name__ == "__main__":
+    user_name = get_user_name()
+    game_loop(user_name)
