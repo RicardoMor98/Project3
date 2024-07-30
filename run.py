@@ -1,5 +1,13 @@
 import random
 
+# user name imput
+
+def get_user_name():
+    return input("Please enter your name: ")
+
+user_name = get_user_name()
+print(f"Welcome {user_name} to Battleship!")
+
 # the game board as 2D list
 
 BOARD_SIZE = 10
@@ -26,3 +34,4 @@ def random_ship_placement(board):
         x = random.randint(0, BOARD_SIZE - 1)
         y = random.randint(0, BOARD_SIZE - 1)
         place_ship(board, x, y, length)
+
