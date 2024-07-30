@@ -35,3 +35,43 @@ def random_ship_placement(board):
         y = random.randint(0, BOARD_SIZE - 1)
         place_ship(board, x, y, length)
 
+# game loop 
+
+def game_loop(user_name):
+    user_ships_placed = False
+    cpu_ships_placed = False
+    
+    while not user_ships_placed or not cpu_ships_placed:
+        if not user_ships_placed:
+            print(f"{user_name}, please place your ships.")
+            place_ship(board, 5, 5, 3)  # Example ship placement
+            user_ships_placed = True
+        if not cpu_ships_placed:
+            random_ship_placement(board)
+            cpu_ships_placed = True
+
+    while True:
+        user_guess = guess_coordinate(board, 'user')
+        cpu_guess = guess_coordinate(board, 'cpu')
+        
+        user_hit = board[user_guess[0]][user_guess[1]] == SHIP
+        cpu_hit = board[cpu_guess[0]][cpu_guess[1]] == SHIP
+        
+        update_board(board, *user_guess, user_hit)
+        update_board(board, *cpu_guess, cpu_hit)
+        
+        display_board(board)
+        
+        if user_hit:
+            print(f"{user_name}, you hit the target!")
+        else:
+            print(f"{user_name}, you missed the target!")
+
+        if cpu_hit:
+            print("CPU hit your ship!")
+        else:
+            print("CPU missed the target!")
+        
+        if all(cell == HIT for row in board for cell in row):
+            print(f"All your ships have been sunk, {user_name}!")
+            break
