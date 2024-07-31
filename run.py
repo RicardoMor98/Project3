@@ -73,11 +73,12 @@ def guess_coordinate(board, player):
 def game_loop(user_name):
     user_ships_placed = False
     cpu_ships_placed = False
+    turn = 'user'
     
     while not user_ships_placed or not cpu_ships_placed:
         if not user_ships_placed:
             print(f"{user_name}, please place your ships.")
-            place_ship(board, 5, 5, 3)  # Example ship placement
+            place_ship_by_user(board)
             user_ships_placed = True
         if not cpu_ships_placed:
             random_ship_placement(board)
