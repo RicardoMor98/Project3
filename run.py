@@ -6,11 +6,26 @@ print("Welcome to Battleship!")
 
 # the game board as 2D list
 
-BOARD_SIZE = 10
+# Constants
+HIT_CHAR = 'x'
+MISS_CHAR = 'o'
+BLANK_CHAR = '.'
+HORIZONTAL = 'h'
+VERTICAL = 'v'
+MAX_MISSES = 10
+NUM_ROWS = 10
+NUM_COLS = 10
+ROW_IDX = 0
+COL_IDX = 1
+MIN_ROW_LABEL = 'A'
+MAX_ROW_LABEL = 'J'
+
+# Game states
 EMPTY = '.'
 SHIP = 'S'
-HIT = 'X'
-MISS = 'O'
+HIT = 'H'
+MISS = 'M'
+SUNK = 'X'
 
 # initialize the board
 
