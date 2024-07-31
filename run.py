@@ -22,12 +22,8 @@ NUM_COLS = 10
 MIN_ROW_LABEL = 'A'
 MAX_ROW_LABEL = 'J'
 
-# Game states
-EMPTY = '.'
-SHIP = 'S'
-HIT = 'H'
-MISS = 'M'
-SUNK = 'X'
+# Simplified ship sizes
+SHIP_SIZES = {i: 1 for i in range(1, 6)}
 
 # initialize the board
 
