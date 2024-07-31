@@ -29,7 +29,8 @@ SUNK = 'X'
 
 # initialize the board
 
-board = [[EMPTY for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
+BOARD_SIZE = NUM_ROWS
+board = [[EMPTY for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]
 
 # displaying the board
 
