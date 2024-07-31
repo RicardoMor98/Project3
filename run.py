@@ -132,7 +132,7 @@ def game_loop(user_name):
             place_ship_by_user(board)
             user_ships_placed = True
         if not cpu_ships_placed:
-            random_ship_placement(board)
+            place_cpu_ships(board)
             cpu_ships_placed = True
 
     while True:
