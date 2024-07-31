@@ -97,6 +97,9 @@ def guess_coordinate(board, player):
         except ValueError:
             print("Invalid input. Please enter numbers.")
 
+def has_ships_remaining(board):
+    return any(cell == SHIP for row in board for cell in row)
+
 # game loop 
 
 def game_loop(user_name):
