@@ -13,18 +13,14 @@ print("Welcome to Battleship!")
 # the game board as 2D list
 
 # Constants
-HIT_CHAR = 'x'
-MISS_CHAR = 'o'
+HIT_CHAR = 'X'
+MISS_CHAR = 'O'
 BLANK_CHAR = '.'
-HORIZONTAL = 'h'
-VERTICAL = 'v'
-MAX_MISSES = 10
+MAX_MISSES = 20
 NUM_ROWS = 10
 NUM_COLS = 10
-ROW_IDX = 0
-COL_IDX = 1
-MIN_ROW_LABEL = ''
-MAX_ROW_LABEL = ' '
+MIN_ROW_LABEL = 'A'
+MAX_ROW_LABEL = 'J'
 
 # Game states
 EMPTY = '.'
