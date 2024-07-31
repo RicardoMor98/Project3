@@ -38,12 +38,22 @@ def place_ship(board, x, y, length):
         if x+i < BOARD_SIZE:
             board[x+i][y] = SHIP
 
-def random_ship_placement(board):
-    for _ in range(5):  # Max 5 ships
-        length = random.randint(1, 3)  # Max length 3
-        x = random.randint(0, BOARD_SIZE - 1)
-        y = random.randint(0, BOARD_SIZE - 1)
-        place_ship(board, x, y, length)
+def place_ship_by_user(board):
+    while True:
+        try:
+            x = int(input("Enter the starting row for the ship (0-9): "))
+            y = int(input("Enter the starting column for the ship (0-9): "))
+            length = int(input("Enter the length of the ship (1-3): "))
+            if x >= 0 and x < len(board) and y >= 0 and y < len(board[0]) and length > 0 and length <= 3:
+                for i in range(length):
+                    if x + i < len(board) and y < len(board[0]):
+                        board[x + i][y] = SHIP
+                print("Ship successfully placed.")
+                break
+            else:
+                print("Invalid input. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter numbers.")
 
 # coordinates guess
 
