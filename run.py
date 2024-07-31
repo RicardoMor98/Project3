@@ -21,11 +21,14 @@ board = [[EMPTY for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
 def get_user_name():
     return input("Please enter your name: ")
 
-def update_board(board, x, y, hit):
+def update_board(board, x, y, hit, shot_by_cpu=False):
     if hit:
-        board[x][y] = HIT
+        if shot_by_cpu:
+            board[x][y] = "\033[91mX\033[0m"  # Red for CPU hit
+        else:
+            board[x][y] = "\033[92mX\033[0m"  # Green for user hit
     else:
-        board[x][y] = MISS
+        board[x][y] = "\033[94mO\033[0m"  # Blue for miss
 
 def display_board(board):
     for row in board:
@@ -112,6 +115,14 @@ def game_loop(user_name):
     cpu_ships_placed = False
     turn = 'user'
     ships_sunk = False  # Track if all ships have been sunk
+
+    # User places their ships
+    place_ship_by_user(board)
+    user_ships_placed = True
+
+    # CPU places its ships
+    place_cpu_ships(board)
+    cpu_ships_placed = True
     
     while not user_ships_placed or not cpu_ships_placed:
         if not user_ships_placed:
