@@ -118,29 +118,33 @@ def game_loop(user_name):
 
     while True:
         user_guess = guess_coordinate(board, 'user')
-        cpu_guess = guess_coordinate(board, 'cpu')
-        
-        user_hit = board[user_guess[0]][user_guess[1]] == SHIP
-        cpu_hit = board[cpu_guess[0]][cpu_guess[1]] == SHIP
-        
-        update_board(board, *user_guess, user_hit)
-        update_board(board, *cpu_guess, cpu_hit)
+        cpu_guess = None
+    
+        if turn == 'user':
+            user_hit = board[user_guess[0]][user_guess[1]] == SHIP
+            update_board(board, *user_guess, user_hit)
+            if user_hit:
+                print(f"{user_name}, you hit the target!")
+            else:
+                print(f"{user_name}, you missed the target!")
+            if not has_ships_remaining(board):
+                print(f"All your ships have been sunk, {user_name}!")
+                break
+            turn = 'cpu'
+        elif turn == 'cpu':
+            cpu_hit = board[cpu_guess[0]][cpu_guess[1]] == SHIP
+            update_board(board, *cpu_guess, cpu_hit)
+            if cpu_hit:
+                print("CPU hit your ship!")
+            else:
+                print("CPU missed the target!")
+            if not has_ships_remaining(board):
+                print("All your ships have been sunk!")
+                break
+            turn = 'user'
         
         display_board(board)
-        
-        if user_hit:
-            print(f"{user_name}, you hit the target!")
-        else:
-            print(f"{user_name}, you missed the target!")
 
-        if cpu_hit:
-            print("CPU hit your ship!")
-        else:
-            print("CPU missed the target!")
-        
-        if all(cell == HIT for row in board for cell in row):
-            print(f"All your ships have been sunk, {user_name}!")
-            break
         
 # run game
 
