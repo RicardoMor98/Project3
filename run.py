@@ -35,21 +35,29 @@ def get_random_position():
     col_choice = random.randint(0, NUM_COLS - 1)
     return (row_choice, col_choice)
 
+def play_battleship():
+    """Controls flow of Battleship games including display of welcome and goodbye messages."""
+    # Prompt for username
+    username = input("Please enter your username: ")
+    print(f"\nWelcome to Battleship, {username}!\n")
+    
+    game_over = False
+
+    while not game_over:
+            game = Game()
+    game.display_board()
+
+    while not game.is_complete():
+            pos = game.get_guess()
+            result = game.check_guess(pos)
+            game.update_game(result, pos)
+            game.display_board()
+
+    game_over = end_program()
+
+    print("Goodbye.")
 
 
-# displaying the board
-
-def get_user_name():
-    return input("Please enter your name: ")
-
-def update_board(board, x, y, hit, shot_by_cpu=False):
-    if hit:
-        if shot_by_cpu:
-            board[x][y] = "\033[91mX\033[0m"  # Red for CPU hit
-        else:
-            board[x][y] = "\033[92mX\033[0m"  # Green for user hit
-    else:
-        board[x][y] = "\033[94mO\033[0m"  # Blue for miss
 
 # Displaying the board
 def display_board(board) :
