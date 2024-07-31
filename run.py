@@ -58,6 +58,32 @@ def place_ship_by_user(board):
         except ValueError:
             print("Invalid input. Please enter numbers.")
 
+def random_ship_placement(board):
+    ship_lengths = [3, 2, 1]
+    for length in ship_lengths:
+        while True:
+            x = random.randint(0, BOARD_SIZE - 1)
+            y = random.randint(0, BOARD_SIZE - 1)
+            direction = random.choice(['horizontal', 'vertical'])
+            
+            if direction == 'horizontal':
+                if x + length <= BOARD_SIZE:
+                    for i in range(length):
+                        if board[x + i][y] != SHIP:
+                            board[x + i][y] = SHIP
+                            break
+                    else:
+                        continue
+            else:  # vertical
+                if y + length <= BOARD_SIZE:
+                    for i in range(length):
+                        if board[x][y + i] != SHIP:
+                            board[x][y + i] = SHIP
+                            break
+                    else:
+                        continue   
+            break
+
 # coordinates guess
 
 def guess_coordinate(board, player):
