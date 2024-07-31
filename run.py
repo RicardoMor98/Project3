@@ -57,6 +57,38 @@ def play_battleship():
 
     print("Goodbye.")
 
+# game loop
+
+class Game:
+    def __init__(self, max_misses=MAX_MISSES):
+        self.max_misses = max_misses
+        self.guesses = []
+        self.user_board = USER_BOARD.copy()
+        self.cpu_board = CPU_BOARD.copy()
+        self.guessed_positions = set()  # Track guessed positions
+
+    def display_board(self, board):
+        print("\n".join([" ".join([board[i][j] for j in range(NUM_COLS)]) for i in range(NUM_ROWS)]))
+
+    def initialize_board(self, board):
+        return [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]   
+
+    def update_game(self, guess_status, position, board):
+        row, column = position
+        if guess_status:
+            # User hit a ship
+            board[row][column] = GREEN + HIT_CHAR + RESET
+        else:
+            # Missed target or CPU hit
+            board[row][column] = BLUE + MISS_CHAR + RESET
+            self.guesses.append(position)
+            self.guessed_positions.add(position)  # Mark as guessed 
+
+    def is_complete(self):
+        if len(self.guesses) == self.max_misses:
+            print("Sorry! No guesses left.")
+            return True
+        return False     
 
 
 # Displaying the board
@@ -155,7 +187,7 @@ def guess_coordinate(board, player):
 def has_ships_remaining(board):
     return any(cell == SHIP for row in board for cell in row)
 
-# game loop 
+ 
 
 def game_loop(user_name):
     user_ships_placed = False
