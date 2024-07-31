@@ -41,22 +41,27 @@ def place_ship(board, x, y, length):
             board[x+i][y] = SHIP
 
 def place_ship_by_user(board):
-    while True:
-        try:
-            x = int(input("Enter the starting row for the ship (0-9): "))
-            y = int(input("Enter the starting column for the ship (0-9): "))
-            length = int(input("Enter the length of the ship (1-3): "))
-            if x >= 0 and x < BOARD_SIZE and y >= 0 and y < BOARD_SIZE and length > 0 and length <= 3:
-                for i in range(length):
-                    if x + i < len(board) and y < len(board[0]):
-                        board[x + i][y] = SHIP
-                print("Ship successfully placed.")
-                display_board(board)  # Show the updated board
-                break
-            else:
-                print("Invalid input. Please try again.")
-        except ValueError:
-            print("Invalid input. Please enter numbers.")
+    for _ in range(5):
+        while True:
+            try:
+                x = int(input("Enter the starting row for the ship (0-9): "))
+                y = int(input("Enter the starting column for the ship (0-9): "))
+                length = int(input("Enter the length of the ship (1-3): "))
+                if x >= 0 and x < BOARD_SIZE and y >= 0 and y < BOARD_SIZE and length > 0 and length <= 3:
+                    for i in range(length):
+                        if x + i < len(board) and y < len(board[0]):
+                            board[x + i][y] = SHIP
+                    print("Ship successfully placed.")
+                    display_board(board)  # Show the updated board
+                    break
+                else:
+                    print("Invalid input. Please try again.")
+            except ValueError:
+                print("Invalid input. Please enter numbers.")
+
+def place_cpu_ships(board):
+    for _ in range(5):  # Place 5 ships for the CPU
+        random_ship_placement(board)
 
 def random_ship_placement(board):
     ship_lengths = [3, 2, 1]
