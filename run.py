@@ -1,5 +1,11 @@
 import random
 
+# ANSI escape codes for colors
+RED = '\033[31m'
+GREEN = '\033[32m'
+BLUE = '\033[34m'
+RESET = '\033[0m'  # Reset color
+
 # welcome user to the game
 
 print("Welcome to Battleship!")
@@ -17,8 +23,8 @@ NUM_ROWS = 10
 NUM_COLS = 10
 ROW_IDX = 0
 COL_IDX = 1
-MIN_ROW_LABEL = 'A'
-MAX_ROW_LABEL = 'J'
+MIN_ROW_LABEL = ''
+MAX_ROW_LABEL = ' '
 
 # Game states
 EMPTY = '.'
@@ -47,6 +53,7 @@ def update_board(board, x, y, hit, shot_by_cpu=False):
         board[x][y] = "\033[94mO\033[0m"  # Blue for miss
 
 # Displaying the board
+def display_board(board) :
     print(' ', end='')
     for col in range(NUM_COLS):
         print(col+1, end=' ')
@@ -147,6 +154,8 @@ def game_loop(user_name):
     user_ships_placed = False
     cpu_ships_placed = False
     turn = 'user'
+    shots_fired = 0  # Track shots fired
+    max_shots = 15  # Maximum allowed shots
     ships_sunk = False  # Track if all ships have been sunk
 
     # User places their ships
@@ -156,7 +165,7 @@ def game_loop(user_name):
     # CPU places its ships
     place_cpu_ships(board)
     cpu_ships_placed = True
-    
+
     while not user_ships_placed or not cpu_ships_placed:
         if not user_ships_placed:
             print(f"{user_name}, please place your ships.")
@@ -166,7 +175,7 @@ def game_loop(user_name):
             place_cpu_ships(board)
             cpu_ships_placed = True
 
-    while True:
+    while shots_fired < max_shots:
         if turn == 'user':
             user_guess = guess_coordinate(board, 'user')
             user_hit = board[user_guess[0]][user_guess[1]] == SHIP
@@ -185,7 +194,7 @@ def game_loop(user_name):
                     break  # Exit the game
             turn = 'cpu'
         elif turn == 'cpu':
-            cpu_guess = (random.randint(0, BOARD_SIZE - 1), random.randint(0, BOARD_SIZE - 1))
+            cpu_guess = (random.randint(0, NUM_ROWS - 1), random.randint(0, NUM_COLS - 1))
             cpu_hit = board[cpu_guess[0]][cpu_guess[1]] == SHIP
             update_board(board, *cpu_guess, cpu_hit, shot_by_cpu=True)
             if cpu_hit:
@@ -201,9 +210,14 @@ def game_loop(user_name):
                 else:
                     break  # Exit the game
             turn = 'user'
-        
         display_board(board)
-        pass
+        shots_fired += 1  # Increment shots fired
+
+    # Determine winner based on remaining ships
+    if has_ships_remaining(board):
+        print("The game ends in a draw.")
+    else:
+        print("Congratulations, you won the Battleship!")
 
         
 # run game
