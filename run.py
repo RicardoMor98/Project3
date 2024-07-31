@@ -26,9 +26,16 @@ MAX_ROW_LABEL = 'J'
 SHIP_SIZES = {i: 1 for i in range(1, 6)}
 
 # initialize the board
+USER_BOARD = [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]
+CPU_BOARD = [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]
 
-BOARD_SIZE = NUM_ROWS
-board = [[EMPTY for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]
+def get_random_position():
+    """Generates a random location on a board of NUM_ROWS x NUM_COLS."""
+    row_choice = random.randint(0, NUM_ROWS - 1)
+    col_choice = random.randint(0, NUM_COLS - 1)
+    return (row_choice, col_choice)
+
+
 
 # displaying the board
 
