@@ -40,8 +40,8 @@ def display_board(board):
 
 def place_ship(board, x, y, length):
     for i in range(length):
-        if x+i < BOARD_SIZE:
-            board[x+i][y] = SHIP
+        if x+i < BOARD_SIZE and y+i < BOARD_SIZE:  # Check both row and column
+            board[x+i][y+i] = SHIP
 
 def place_ship_by_user(board):
     for _ in range(5):
@@ -154,7 +154,7 @@ def game_loop(user_name):
         elif turn == 'cpu':
             cpu_guess = (random.randint(0, BOARD_SIZE - 1), random.randint(0, BOARD_SIZE - 1))
             cpu_hit = board[cpu_guess[0]][cpu_guess[1]] == SHIP
-            update_board(board, *cpu_guess, cpu_hit)
+            update_board(board, *cpu_guess, cpu_hit, shot_by_cpu=True)
             if cpu_hit:
                 print("CPU hit your ship!")
             else:
