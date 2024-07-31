@@ -47,10 +47,25 @@ def update_board(board, x, y, hit, shot_by_cpu=False):
         board[x][y] = "\033[94mO\033[0m"  # Blue for miss
 
 # Displaying the board
-def display_board(board):
-    for row in board:
-        print(' '.join(row))
+    print(' ', end='')
+    for col in range(NUM_COLS):
+        print(col+1, end=' ')
+    print('\n', end='')
 
+    for row in range(NUM_ROWS):
+        print(MIN_ROW_LABEL + str(row+1), end=' ')
+        for col in range(NUM_COLS):
+            print(board[row][col], end=' ')
+        print('\n', end='')
+
+    # Add padding to the top and bottom of the board
+    top_bottom_padding = '\n' + '-' * (NUM_COLS * 3 + 6) + '\n'
+    print(top_bottom_padding, end='')
+
+
+    # Add padding to the right and left of the board
+    left_right_padding = '+' + '-' * (NUM_COLS * 3 + 6) + '+'
+    print(left_right_padding)
 
 # placing the ships
 
@@ -188,10 +203,11 @@ def game_loop(user_name):
             turn = 'user'
         
         display_board(board)
+        pass
 
         
 # run game
 
 if __name__ == "__main__":
-    user_name = get_user_name()  # Get user name here
-    game_loop(user_name)  # Pass user_name to game_loop
+    user_name = input("Please enter your name: ")
+    game_loop(user_name)
