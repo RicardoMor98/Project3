@@ -1,12 +1,8 @@
 import random
 
-# user name imput
+# welcome user to the game
 
-def get_user_name():
-    return input("Please enter your name: ")
-
-user_name = get_user_name()
-print(f"Welcome {user_name} to Battleship!")
+print(f"Welcome to Battleship!")
 
 # the game board as 2D list
 
@@ -21,6 +17,9 @@ MISS = 'O'
 board = [[EMPTY for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
 
 # displaying the board
+
+def get_user_name():
+    return input("Please enter your name: ")
 
 def update_board(board, x, y, hit):
     if hit:
