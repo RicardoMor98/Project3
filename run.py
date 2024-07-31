@@ -2,7 +2,7 @@ import random
 
 # welcome user to the game
 
-print(f"Welcome to Battleship!")
+print("Welcome to Battleship!")
 
 # the game board as 2D list
 
@@ -44,23 +44,32 @@ def place_ship(board, x, y, length):
             board[x+i][y+i] = SHIP
 
 def place_ship_by_user(board):
-    for _ in range(5):
-        while True:
-            try:
-                x = int(input("Enter the starting row for the ship (0-9): "))
-                y = int(input("Enter the starting column for the ship (0-9): "))
-                length = int(input("Enter the length of the ship (1-3): "))
-                if x >= 0 and x < BOARD_SIZE and y >= 0 and y < BOARD_SIZE and length > 0 and length <= 3:
-                    for i in range(length):
-                        if x + i < len(board) and y < len(board[0]):
-                            board[x + i][y] = SHIP
-                    print("Ship successfully placed.")
-                    display_board(board)  # Show the updated board
-                    break
-                else:
-                    print("Invalid input. Please try again.")
-            except ValueError:
-                print("Invalid input. Please enter numbers.")
+        for i in range(5):
+            while True:
+                try:
+                    x = int(input("Enter the starting row for the ship (0-9): "))
+                    y = int(input("Enter the starting column for the ship (0-9): "))
+                    length = int(input("Enter the length of the ship (1-3): "))
+                    direction = input("Enter the direction (horizontal/vertical): ")  # Added direction input
+                    if x >= 0 and x < BOARD_SIZE and y >= 0 and y < BOARD_SIZE and length > 0 and length <= 3:
+                        if direction.lower() == 'horizontal' and all(board[x+i][y] == EMPTY for i in range(length)):
+                            for i in range(length):
+                                board[x+i][y] = SHIP
+                            print("Ship successfully placed.")
+                            display_board(board)  # Show the updated board
+                            break
+                        elif direction.lower() == 'vertical' and all(board[x][y+i] == EMPTY for i in range(length)):
+                                for i in range(length):
+                                    board[x][y+i] = SHIP
+                                print("Ship successfully placed.")
+                                display_board(board)  # Show the updated board
+                                break
+                        else:
+                                print("Ship cannot fit at this location. Try again.")
+                    else:
+                                print("Invalid input. Please try again.")
+                except ValueError:
+                                print("Invalid input. Please enter numbers.")
 
 def place_cpu_ships(board):
     for _ in range(5):  # Place 5 ships for the CPU
@@ -68,29 +77,22 @@ def place_cpu_ships(board):
 
 def random_ship_placement(board):
     ship_lengths = [3, 2, 1]
+    directions = ['horizontal', 'vertical']
+    
     for length in ship_lengths:
         while True:
-            x = random.randint(0, BOARD_SIZE - 1)
-            y = random.randint(0, BOARD_SIZE - 1)
-            direction = random.choice(['horizontal', 'vertical'])
+            x = random.randint(0, BOARD_SIZE - length)
+            y = random.randint(0, BOARD_SIZE - length)
+            direction = random.choice(directions)
             
-            if direction == 'horizontal':
-                if x + length <= BOARD_SIZE:
-                    for i in range(length):
-                        if board[x + i][y] != SHIP:
-                            board[x + i][y] = SHIP
-                            break
-                    else:
-                        continue
-            elif direction == 'vertical':
-                 if y + length <= BOARD_SIZE:
-                    for i in range(length):
-                        if board[x][y + i] != SHIP:
-                            board[x][y + i] = SHIP
-                            break
-                    else:
-                        continue   
-            break
+            if direction == 'horizontal' and all(board[x+i][y] == EMPTY for i in range(length)):
+                for i in range(length):
+                    board[x+i][y] = SHIP
+                break
+            elif direction == 'vertical' and all(board[x][y+i] == EMPTY for i in range(length)):
+                for i in range(length):
+                    board[x][y+i] = SHIP
+                break
 
 # coordinates guess
 
