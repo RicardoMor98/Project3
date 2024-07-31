@@ -24,50 +24,37 @@ SHIP_SIZES = {i: 1 for i in range(1, 6)}
 USER_BOARD = [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]
 CPU_BOARD = [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]
 
-def get_random_position():
-    """Generates a random location on a board of NUM_ROWS x NUM_COLS."""
-    row_choice = random.randint(0, NUM_ROWS - 1)
-    col_choice = random.randint(0, NUM_COLS - 1)
-    return (row_choice, col_choice)
+# implementing a ship class
 
-def play_battleship():
-    """Controls flow of Battleship games including display of welcome and goodbye messages."""
-    # Prompt for username
-    username = input("Please enter your username: ")
-    print(f"\nWelcome to Battleship, {username}!\n")
-    
-    
+class Ship:
+    def __init__(self, name, position, size):
+        self.name = name
+        self.position = position
+        self.size = size
+        self.sunk = False
 
-    
-    game = Game()
-    game.display_board(USER_BOARD)  # Display initial user board
-    game.display_board(CPU_BOARD)  # Display initial cpu board
-
-    while not game.is_complete():
-            pos = game.get_guess()
-            result = game.check_guess(pos, CPU_BOARD) # Check guess against CPU board
-            game.update_game(result, pos, CPU_BOARD)  # Update game state
-            game.display_board(game.user_board)  # Display updated board
-
-    game_over = game.end_program() # End program based on user choice
-
-    print("Goodbye.")
-
-# game loop
-
-class Game:
+# game loop  
+class Game: 
     def __init__(self, max_misses=MAX_MISSES):
         self.max_misses = max_misses
         self.guesses = []
         self.user_board = USER_BOARD.copy()
         self.cpu_board = CPU_BOARD.copy()
-        self.guessed_positions = set()  # Track guessed positions
-
+        self.guessed_positions = set()  # Track guessed positions  
+    
     def display_board(self, board):
-        print("\n".join([" ".join([board[i][j] for j in range(NUM_COLS)]) for i in range(NUM_ROWS)]))
-
+        print("  ", end="")
+        for col in range(NUM_COLS):
+            print(col+1, end=" ")
+        print()
+        for row in range(NUM_ROWS):
+         print(MIN_ROW_LABEL + str(row+1), end=" | ")
+        for col in range(NUM_COLS):
+            print(board[row][col], end=" ")
+        print("|", MIN_ROW_LABEL + str(row+1))
+    
     def initialize_board(self, board):
-        return [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]   
+        return [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]  
 
     def update_game(self, guess_status, position, board):
         row, column = position
@@ -84,23 +71,18 @@ class Game:
         if len(self.guesses) == self.max_misses:
             print("Sorry! No guesses left.")
             return True
-        return False     
-
-    def check_guess(self, position, board):
-        row, column = position
-        if board[row][column] == '.' and position not in self.guessed_positions:
-            return True
-        return False
+        return False  
 
     def get_guess(self):
         while True:
             try:
-                row = int(input("Enter a row (0-9): ")) - 1
-                column = int(input("Enter a column (0-9): ")) - 1
+                row_label = input("Enter a row label (A-J): ").upper()
+                row = ord(row_label) - ord('A')
+                column = int(input("Enter a column (1-10): "))
                 if 0 <= row < NUM_ROWS and 0 <= column < NUM_COLS and (row, column) not in self.guessed_positions:
                     return (row, column)
             except ValueError:
-                print("Invalid input. Please enter numbers.")
+                print("Invalid input. Please enter letters for rows and numbers for columns.")
 
     def end_program():
         while True:
@@ -108,6 +90,25 @@ class Game:
             if user_input in ['Y', 'N']:
                 return user_input == 'Y'
 
+    def play_battleship():
+            """Controls flow of Battleship games including display of welcome and goodbye messages."""
+        # Prompt for username
+            username = input("Please enter your username: ")
+            print(f"\nWelcome to Battleship, {username}!\n")
+            game = Game()
+            game.display_board(game.user_board)  # Display initial user board
+            game.display_board(game.cpu_board)  # Display initial cpu board
+
+    while not game.is_complete():
+        pos = game.get_guess()
+        result = game.check_guess(pos, game.cpu_board)  # Check guess against CPU board
+        game.update_game(result, pos, game.cpu_board)  # Update game state
+        game.display_board(game.user_board)  # Display updated board
+
+    game_over = game.end_program()  # End program based on user choice
+
+    print("Goodbye.")
+    
 def main():
     play_battleship()
 
