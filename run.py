@@ -29,7 +29,9 @@ def update_board(board, x, y, hit):
 
 def display_board(board):
     for row in board:
-        print(' '.join(row))
+       print(' '.join([f"\033[94m{cell}\033[0m" if cell == SHIP else f"\033[91m{cell}\033[0m" if cell == HIT else f"\033[92m{cell}\033[0m" if cell == MISS else cell for cell in row]))
+# added colors to the ships, hit, and miss
+
 
 # placing the ships
 
@@ -49,6 +51,7 @@ def place_ship_by_user(board):
                     if x + i < len(board) and y < len(board[0]):
                         board[x + i][y] = SHIP
                 print("Ship successfully placed.")
+                display_board(board)  # Show the updated board
                 break
             else:
                 print("Invalid input. Please try again.")
