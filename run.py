@@ -46,7 +46,7 @@ def place_ship_by_user(board):
             x = int(input("Enter the starting row for the ship (0-9): "))
             y = int(input("Enter the starting column for the ship (0-9): "))
             length = int(input("Enter the length of the ship (1-3): "))
-            if x >= 0 and x < len(board) and y >= 0 and y < len(board[0]) and length > 0 and length <= 3:
+            if x >= 0 and x < BOARD_SIZE and y >= 0 and y < BOARD_SIZE and length > 0 and length <= 3:
                 for i in range(length):
                     if x + i < len(board) and y < len(board[0]):
                         board[x + i][y] = SHIP
@@ -74,8 +74,8 @@ def random_ship_placement(board):
                             break
                     else:
                         continue
-            else:  # vertical
-                if y + length <= BOARD_SIZE:
+            elif direction == 'vertical':
+                 if y + length <= BOARD_SIZE:
                     for i in range(length):
                         if board[x][y + i] != SHIP:
                             board[x][y + i] = SHIP
@@ -106,6 +106,7 @@ def game_loop(user_name):
     user_ships_placed = False
     cpu_ships_placed = False
     turn = 'user'
+    ships_sunk = False  # Track if all ships have been sunk
     
     while not user_ships_placed or not cpu_ships_placed:
         if not user_ships_placed:
@@ -117,30 +118,39 @@ def game_loop(user_name):
             cpu_ships_placed = True
 
     while True:
-        user_guess = guess_coordinate(board, 'user')
-        cpu_guess = None
-    
         if turn == 'user':
+            user_guess = guess_coordinate(board, 'user')
             user_hit = board[user_guess[0]][user_guess[1]] == SHIP
             update_board(board, *user_guess, user_hit)
             if user_hit:
                 print(f"{user_name}, you hit the target!")
             else:
                 print(f"{user_name}, you missed the target!")
-            if not has_ships_remaining(board):
+            ships_sunk = not has_ships_remaining(board)
+            if ships_sunk:
                 print(f"All your ships have been sunk, {user_name}!")
-                break
+                play_again = input("Do you want to play again? (yes/no): ")
+                if play_again.lower() == 'yes':
+                    game_loop(user_name)  # Restart the game
+                else:
+                    break  # Exit the game
             turn = 'cpu'
         elif turn == 'cpu':
+            cpu_guess = (random.randint(0, BOARD_SIZE - 1), random.randint(0, BOARD_SIZE - 1))
             cpu_hit = board[cpu_guess[0]][cpu_guess[1]] == SHIP
             update_board(board, *cpu_guess, cpu_hit)
             if cpu_hit:
                 print("CPU hit your ship!")
             else:
                 print("CPU missed the target!")
-            if not has_ships_remaining(board):
+            ships_sunk = not has_ships_remaining(board)
+            if ships_sunk:
                 print("All your ships have been sunk!")
-                break
+                play_again = input("Do you want to play again? (yes/no): ")
+                if play_again.lower() == 'yes':
+                    game_loop(user_name)  # Restart the game
+                else:
+                    break  # Exit the game
             turn = 'user'
         
         display_board(board)
