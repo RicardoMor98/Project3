@@ -52,7 +52,7 @@ class Board:
                 col = random.randint(0, self.board_size - 1)
             board[row][col] = "S"
 
-     def validate_input(self, row, col):
+    def validate_input(self, row, col):
         # Check if the input coordinates are within the valid range
         return 0 <= row < self.board_size and 0 <= col < self.board_size
 
@@ -118,29 +118,29 @@ class Board:
                         row = int(row_input)
                         col = int(col_input)
 
-                    if not self.validate_input(row, col):
-                        print("Invalid coordinates. Try again.")
-                        continue
+                        if not self.validate_input(row, col):
+                            print("Invalid coordinates. Try again.")
+                            continue
 
-                    if (row, col) in player_guessed_coordinates:
-                        print(error_m)
-                        continue
+                        if (row, col) in player_guessed_coordinates:
+                            print(error_m)
+                            continue
 
-                        player_guessed_coordinates.add((row, col))
+                            player_guessed_coordinates.add((row, col))
 
-                        player_hit = self.make_shot(self.computer_board,
+                            player_hit = self.make_shot(self.computer_board,
                                                     row, col, player_name)
-                    if player_hit:
-                        self.computer_ships -= 1
-                        self.player_score += 1  # Update player's score
+                        if player_hit:
+                            self.computer_ships -= 1
+                            self.player_score += 1  # Update player's score
 
-                        break
+                            break
 
                         except ValueError:
-                        print("Invalid input. Please enter a number.")
+                            print("Invalid input. Please enter a number.")
 
-                    if row_input.lower() == "exit":
-                        break
+                        if row_input.lower() == "exit":
+                            break
 
             while True:
                     comp_row = random.randint(0, self.board_size - 1)
@@ -195,17 +195,17 @@ class Board:
                         # Reset the game for a new round
                         self.reset_game()
 
-        def reset_game(self):
-                    # Reset game parameters for a new round
-                    self.player_board = [ [" " for _ in range(self.board_size)] for _ in range(self.board_size)]
-                    self.computer_board = [[" " for _ in range(self.board_size)] for _ in range(self.board_size)]
+    def reset_game(self):
+                # Reset game parameters for a new round
+                self.player_board = [ [" " for _ in range(self.board_size)] for _ in range(self.board_size)]
+                self.computer_board = [[" " for _ in range(self.board_size)] for _ in range(self.board_size)]
         
-                    self.player_turns = 15
-                    self.computer_turns = 15
-                    self.player_ships = 5
-                    self.computer_ships = 5
-                    self.player_score = 0  # Reset player's score
-                    self.computer_score = 0  # Reset computer's score
+                self.player_turns = 15
+                self.computer_turns = 15
+                self.player_ships = 5
+                self.computer_ships = 5
+                self.player_score = 0  # Reset player's score
+                self.computer_score = 0  # Reset computer's score
 
 if __name__ == "__main__":
     game = Board()
