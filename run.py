@@ -16,7 +16,8 @@ class Message:
                      "I wish you good fortune in wars to come!\n")
 
 # Global Variables
-ammo = INIT_AMMO
+user_ammo = INIT_AMMO
+cpu_ammo = INIT_AMMO
 ships_left = INIT_SHIPS
 turn = 'user'
 
