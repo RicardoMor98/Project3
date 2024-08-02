@@ -147,3 +147,17 @@ def play_game(username):
 
     # Ask to play again or quit
     play_again(username)
+
+# Asks the user if they want to replay the game. If yes, it resets the game state and restarts the game.
+def play_again(username):
+    global ammo, ships_left, turn
+    try_again = input(f"Do you want to play again? <Y>es or <N>o? >: ").lower()
+    if try_again == "y":
+        ammo = INIT_AMMO
+        ships_left = INIT_SHIPS
+        turn = 'user'
+        game_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
+        cpu_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
+        play_game(username)
+    else:
+        print(f"Goodbye, {username}!"
