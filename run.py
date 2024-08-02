@@ -21,14 +21,17 @@ class Board:
         self.computer_score = 0  # Track the computer's score
 
 
-    def get_username(self):
-        while True:
-            user_name = input(Message.welcome + "\nEnter your name: ")
-            if user_name:
-                print(f"Welcome to the Battleship game, {user_name}!")
-                return user_name
+     def get_username(self):
+        input_is_valid = False
+        username = ""
+        while input_is_valid is False:
+            user_input = input("Enter your username: ")
+            if len(user_input) < 3:
+                print("Please enter a minimum of 3 chars")
             else:
-                print("Please enter your name.")
+                input_is_valid = True
+                username = user_input
+        return username
 
     def place_user_ships(self):
     """
