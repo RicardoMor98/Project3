@@ -47,62 +47,19 @@ def display_board(board):
         print(' '.join(row))
 
 
-# game loop  
-class Game: 
-    def __init__(self, max_misses=MAX_MISSES):
-        self.max_misses = max_misses
-        self.guesses = []
-        self.user_board = USER_BOARD.copy()
-        self.cpu_board = CPU_BOARD.copy()
-        self.guessed_positions = set()  # Track guessed positions  
-    
-    def display_board(self, board):
-        print("  ", end="")
-        for col in range(NUM_COLS):
-            print(col+1, end=" ")
-        print()
-        for row in range(NUM_ROWS):
-         print(MIN_ROW_LABEL + str(row+1), end=" | ")
-        for col in range(NUM_COLS):
-            print(board[row][col], end=" ")
-        print("|", MIN_ROW_LABEL + str(row+1))
-    
-    def initialize_board(self, board):
-        return [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]  
+# Captures the user's guess for a ship's location.
+def get_user_input(username):
+    while True:
+        try:
+            row = int(input(f"{username}, Enter a row number between 1-{BOARD_SIZE}: ")) - 1
+            column = int(input(f"{username}, Enter a column number between 1-{BOARD_SIZE}: ")) - 1
+            if row >= 0 and row < BOARD_SIZE and column >= 0 and column < BOARD_SIZE:
+                return row, column
+            else:
+                raise ValueError("Row or Column is out of bounds.")
+        except ValueError as ve:
+            print("Invalid input. Please enter numbers within the board size.", ve)
 
-    def update_game(self, guess_status, position, board):
-        row, column = position
-        if guess_status:
-            # User hit a ship
-            board[row][column] = GREEN + HIT_CHAR + RESET
-        else:
-            # Missed target or CPU hit
-            board[row][column] = BLUE + MISS_CHAR + RESET
-            self.guesses.append(position)
-            self.guessed_positions.add(position)  # Mark as guessed 
-
-    def is_complete(self):
-        if len(self.guesses) == self.max_misses:
-            print("Sorry! No guesses left.")
-            return True
-        return False  
-
-    def get_guess(self):
-        while True:
-            try:
-                row_label = input("Enter a row label (A-J): ").upper()
-                row = ord(row_label) - ord('A')
-                column = int(input("Enter a column (1-10): "))
-                if 0 <= row < NUM_ROWS and 0 <= column < NUM_COLS and (row, column) not in self.guessed_positions:
-                    return (row, column)
-            except ValueError:
-                print("Invalid input. Please enter letters for rows and numbers for columns.")
-
-    def end_program():
-        while True:
-            user_input = input("Play again? (Y/N) ").upper()
-            if user_input in ['Y', 'N']:
-                return user_input == 'Y'
 
     def play_battleship():
             """Controls flow of Battleship games including display of welcome and goodbye messages."""
