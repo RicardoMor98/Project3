@@ -79,8 +79,60 @@ def cpu_guess():
 
     print("Goodbye.")
     
-def main():
-    play_battleship()
+# Orchestrates the game flow, including initializing the game board, placing ships, and managing turns between the user and the CPU.
+def play_game(username):
+    global ammo, ships_left, turn
+    turn = 'user'
+    game_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
+    cpu_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
+    ship_coordinates = create_random_ships(INIT_SHIPS)
+    ships_left = INIT_SHIPS
 
-if __name__ == "__main__":
-    main()         
+    print(Message.instructions.format(INIT_AMMO=ammo, INIT_SHIPS=ships_left))
+    
+    display_board(game_board)
+
+    while ammo > 0:
+        if turn == 'user':
+            row, column = get_user_input(username)
+            if row is None:
+                continue
+            if check_valid_move(row, column, game_board):
+                if [row, column] in ship_coordinates:
+                    print(f"{username}, Boom! You hit! A ship has exploded! You were granted a new ammo!\n")
+                    game_board[row][column] = "X"
+                    ships_left -= 1
+                    if ships_left == 0:
+                        print(f"{username}, Congrats, you won!")
+                        play_again(username)
+                else:
+                    print(f"{username}, You missed!\n")
+                    game_board[row][column] = "-"
+                    ammo -= 1
+                print(f"Ammo left: {ammo}")
+                print(f"Ships left: {ships_left}")
+                display_board(game_board)
+                display_board(cpu_board)
+                turn = 'cpu'
+        else:
+            row, column = cpu_guess()
+            if cpu_board[row][column] == "X" or cpu_board[row][column] == "-":
+                print("\nCPU has already shot that place!\n")
+                turn = 'user'
+                continue
+            elif [row, column] in ship_coordinates:
+                print(f"\nCPU hit! A ship has exploded!\n")
+                cpu_board[row][column] = "X"
+                ships_left -= 1
+                if ships_left == 0:
+                    print("CPU won!")
+                    play_again(username)
+            else:
+                print(f"\nCPU missed!\n")
+                cpu_board[row][column] = "-"
+                ammo -= 1
+            print(f"Ammo left: {ammo}")
+            print(f"Ships left: {ships_left}")
+            display_board(game_board)
+            display_board(cpu_board)
+            turn = 'user'
