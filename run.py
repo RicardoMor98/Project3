@@ -61,14 +61,14 @@ def get_user_input(username):
             print("Invalid input. Please enter numbers within the board size.", ve)
 
 
-    def play_battleship():
-            """Controls flow of Battleship games including display of welcome and goodbye messages."""
-        # Prompt for username
-            username = input("Please enter your username: ")
-            print(f"\nWelcome to Battleship, {username}!\n")
-            game = Game()
-            game.display_board(game.user_board)  # Display initial user board
-            game.display_board(game.cpu_board)  # Display initial cpu board
+# Validates whether a move is valid (within the board boundaries and not previously guessed).
+def check_valid_move(row, column, game_board):
+    if (game_board[row][column] != "X") and (game_board[row][column] != "-"):
+        return True
+    else:
+        print("You have already shot that place!")
+        return False
+
 
     while not game.is_complete():
         pos = game.get_guess()
