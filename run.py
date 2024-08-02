@@ -41,11 +41,18 @@ def create_random_ships(num_ships):
 
 # Prints the current state of the game board to the console.
 def display_board(board, show_cpu=False):
-    for row in board:
-        print(' '.join(row))
+    # Display the game board
+    print("   0 1 2 3 4")
+    for i, row in enumerate(board):
+        if show_cpu and not is_player:  # Check if it's the computer's board and hide the ships
+            row = [" " if cell == "@" else cell for cell in row]
+        print(f"{i} |{'|'.join(row)}|")
+
     if show_cpu:
         print("\nCPU'S board")
         for row in cpu_board:
+            if not is_player:  # Hide the ships on the CPU's board as well
+                row = [" " if cell == "@" else cell for cell in row]
             print(' '.join(row))
 
 # Captures the user's guess for a ship's location.
