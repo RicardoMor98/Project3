@@ -40,9 +40,13 @@ def create_random_ships(num_ships):
     return ship_coordinates
 
 # Prints the current state of the game board to the console.
-def display_board(board):
+def display_board(board, show_cpu=False):
     for row in board:
         print(' '.join(row))
+    if show_cpu:
+        print("\nCPU'S board")
+        for row in cpu_board:
+            print(' '.join(row))
 
 # Captures the user's guess for a ship's location.
 def get_user_input(username):
@@ -81,7 +85,7 @@ def play_game(username):
     ship_coordinates = create_random_ships(INIT_SHIPS)
     ships_left = INIT_SHIPS
 
-    print(Message.instructions.format(INIT_AMMO=ammo, INIT_SHIPS=ships_left))
+    print(Message.instructions.format(user_ammo=user_ammo, INIT_SHIPS=ships_left))
     
     display_board(game_board)
 
@@ -93,14 +97,14 @@ def play_game(username):
             if check_valid_move(row, column, game_board):
                 if [row, column] in ship_coordinates:
                     print(f"{username}, Boom! You hit! A ship has exploded! You were granted a new ammo!\n")
-                    game_board[row][column] = "X"
+                    cpu_board[row][column] = "X"
                     ships_left -= 1
                     if ships_left == 0:
                         print(f"{username}, Congrats, you won!")
                         play_again(username)
                 else:
                     print(f"{username}, You missed!\n")
-                    game_board[row][column] = "-"
+                    cpu_board[row][column] = "-"
                     user_ammo -= 1
                 print(f"Ammo left: {user_ammo}")
                 print(f"Ships left: {ships_left}")
@@ -108,20 +112,20 @@ def play_game(username):
                 turn = 'cpu'
         else:
             row, column = cpu_guess()
-            if cpu_board[row][column] == "X" or cpu_board[row][column] == "-":
+            if game_board[row][column] == "X" or game_board[row][column] == "-":
                 print("\nCPU has already shot that place!\n")
                 turn = 'user'
                 continue
             elif [row, column] in ship_coordinates:
                 print(f"\nCPU hit! A ship has exploded!\n")
-                cpu_board[row][column] = "X"
+                game_board[row][column] = "X"
                 ships_left -= 1
                 if ships_left == 0:
                     print("CPU won!")
                     play_again(username)
             else:
                 print(f"\nCPU missed!\n")
-                cpu_board[row][column] = "-"
+                game_board[row][column] = "-"
                 cpu_ammo -= 1
             print(f"Ammo left: {cpu_ammo}")
             print(f"Ships left: {ships_left}")
@@ -141,10 +145,11 @@ def play_game(username):
 
 # Asks the user if they want to replay the game. If yes, it resets the game state and restarts the game.
 def play_again(username):
-    global ammo, ships_left, turn
+    global user_ammo, cpu_ammo, ships_left, turn
     try_again = input(f"Do you want to play again? <Y>es or <N>o? >: ").lower()
     if try_again == "y":
-        ammo = INIT_AMMO
+        user_ammo = INIT_AMMO
+        cpu_ammo = INIT_AMMO
         ships_left = INIT_SHIPS
         turn = 'user'
         game_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
