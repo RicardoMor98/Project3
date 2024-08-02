@@ -67,28 +67,21 @@ class Board:
             board[row][col] = "M"
             return False
 
-    def cpu_guess(self):
-        return random.randrange(BOARD_SIZE), random.randrange(BOARD_SIZE)
+    def display_instructions(self):
+        # Display comprehensive game instructions and information
+        print("Welcome to the Battleship game!\n"
+        "Your main objective is to find and destroy all the hidden ships on the map!\n")
+        print("How to play:")
+        print("1. The game consists of two boards, one for each player.")
+        print("2. The boards marked with the numbers 0 - 6.")
+        print("3. You have a total of 15 turns to sink 5 hidden ships.")
+        print("4. Guess a row and a column between 0 and 6.")
+        print("5. If you HIT a ship, you will see 'H'.")
+        print("6. If you MISS a ship, you will see 'M'.")
+        print("7. Your ships are displayed as 'S'.")
+        print("8. Type 'exit' to quit the game at any time.")
+        print("\nI wish you good fortune in wars to come!\n")
 
-    def user_guess(self, username):
-        row, column = self.get_user_input(username)
-        if self.check_valid_move(row, column, self.game_board):
-            if [row, column] in self.create_random_ships(INIT_SHIPS):
-                print(f"{username}, Boom! You hit! A ship has exploded! You were granted a new ammo!\n")
-                self.cpu_board[row][column] = "X"
-                self.ships_left -= 1
-                if self.ships_left == 0:
-                    print(f"{username}, Congrats, you won!")
-                    self.play_again(username)
-            else:
-                print(f"{username}, You missed!\n")
-                self.cpu_board[row][column] = "-"
-                self.user_ammo -= 1
-            print(f"Ammo left: {self.user_ammo}")
-            print(f"Ships left: {self.ships_left}")
-            self.display_board(self.cpu_board, is_player=False, label="CPU's Board:")
-        else:
-            print("Invalid move. Try again.")
 
     def cpu_action(self, username):
         row, column = self.cpu_guess()
