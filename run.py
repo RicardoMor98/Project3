@@ -206,3 +206,7 @@ class Board:
                     self.computer_ships = 5
                     self.player_score = 0  # Reset player's score
                     self.computer_score = 0  # Reset computer's score
+
+if __name__ == "__main__":
+    game = Board()
+    game.play_game()
