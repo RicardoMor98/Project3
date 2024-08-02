@@ -105,7 +105,7 @@ def play_game(self):
                 print("\nCPU's Board:")
                 self.display_board(self.computer_board, False)
 
-             while True:
+            while True:
                     error_m = "You already tried this coordinate. Try again."
                     message = "Enter row (0-6) or type 'exit' to quit: "
                     row_input = input(message)
@@ -118,26 +118,63 @@ def play_game(self):
                         row = int(row_input)
                         col = int(col_input)
 
-                        if not self.validate_input(row, col):
-                            print("Invalid coordinates. Try again.")
-                            continue
+                    if not self.validate_input(row, col):
+                        print("Invalid coordinates. Try again.")
+                        continue
 
-                        if (row, col) in player_guessed_coordinates:
-                            print(error_m)
-                            continue
+                    if (row, col) in player_guessed_coordinates:
+                        print(error_m)
+                        continue
 
                         player_guessed_coordinates.add((row, col))
 
                         player_hit = self.make_shot(self.computer_board,
                                                     row, col, player_name)
-                        if player_hit:
-                            self.computer_ships -= 1
-                            self.player_score += 1  # Update player's score
+                    if player_hit:
+                        self.computer_ships -= 1
+                        self.player_score += 1  # Update player's score
 
                         break
 
-                    except ValueError:
+                        except ValueError:
                         print("Invalid input. Please enter a number.")
 
-                if row_input.lower() == "exit":
-                    break
+                    if row_input.lower() == "exit":
+                        break
+
+            while True:
+                    comp_row = random.randint(0, self.board_size - 1)
+                    comp_col = random.randint(0, self.board_size - 1)
+
+                    if (comp_row, comp_col) in computer_guessed_coordinates:
+                        continue
+
+                        computer_guessed_coordinates.add((comp_row, comp_col))
+
+                        comp_hit = self.make_shot(self.player_board,
+                                              comp_row, comp_col, 'CPU')
+
+                    if  comp_hit:
+                        self.player_ships -= 1
+                        self.computer_score += 1  # Update computer's score
+                        break
+
+                        self.player_turns -= 1
+                        self.computer_turns -= 1
+
+                        print(f"""\nTurns left: {player_name} = {self.player_turns}, CPU = {self.computer_turns}
+                        Scores: {player_name} = {self.player_score}, CPU = {self.computer_score}""")
+
+                        print("\nGame Over!")
+                        print(f"{player_name}'s Board:")
+                        self.display_board(self.player_board)
+                        print("\nCPU's Board:")
+                        self.display_board(self.computer_board, is_player=False)
+
+                    if self.player_ships == 0:
+                        print("""\nSorry, better luck next time. CPU sunk all your ships!""")
+                    elif self.computer_ships == 0:
+                        print(f"""\nCongratulations, {player_name}! You sunk all the CPU's ships!""")
+                    else:
+                        print("\nIt's a draw! Both players have ships remaining.")
+
