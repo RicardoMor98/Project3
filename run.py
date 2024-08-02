@@ -11,6 +11,15 @@ ammo = INIT_AMMO
 ships_left = INIT_SHIPS
 turn = 'user'
 
+# This class defines two static string variables, welcome and instructions, which are used to greet the player and provide game instructions.
+class Message:
+    welcome = ("Welcome to the Battleship game!\n"
+               "Your main objective is to find and destroy all the hidden ships on map!\n")
+    instructions = ("\nIntroductions:\n"
+                     f"You have {INIT_AMMO} ammo and there are {INIT_SHIPS} hidden ships on map.\n"
+                     "In order to hit them, you have to enter specific numbers for that location. For example:\n"
+                     "For the first row and first column, you have to write 1 and 1.\n"
+                     "I wish you good fortune in wars to come!\n")
 
 
 # Simplified ship sizes
