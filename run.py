@@ -82,78 +82,26 @@ class Board:
         print("8. Type 'exit' to quit the game at any time.")
         print("\nI wish you good fortune in wars to come!\n")
 
+def play_game(self):
+        # Main game loop where players take turns and outcomes are determined
+        while True:
+            self.display_instructions()
+            player_name = self.get_username()
 
-    def cpu_action(self, username):
-        row, column = self.cpu_guess()
-        if self.cpu_board[row][column] == "X" or self.cpu_board[row][column] == "-":
-            print("\nCPU has already shot that place!\n")
-            self.user_guess(username)
-        elif [row, column] in self.create_random_ships(INIT_SHIPS):
-            print(f"\nCPU hit! A ship has exploded!\n")
-            self.game_board[row][column] = "X"
-            self.ships_left -= 1
-            if self.ships_left == 0:
-                print("CPU won!")
-                self.play_again(username)
-        else:
-            print(f"\nCPU missed!\n")
-            self.game_board[row][column] = "-"
-            self.cpu_ammo -= 1
-        print(f"Ammo left: {self.cpu_ammo}")
-        print(f"Ships left: {self.ships_left}")
-        self.display_board(self.game_board, is_player=True, label=f"{username}'s Board:")
+            self.place_ships(self.player_board, self.player_ships)
+            self.place_ships(self.computer_board, self.computer_ships)
 
-    def play_game(self, username):
-        self.place_ships(self.game_board, INIT_SHIPS)
-        print(Message.instructions.format(user_ammo=self.user_ammo, INIT_SHIPS=self.ships_left))
-        print("User's Board:")
-        self.display_board(self.game_board)
-        print("\nCPU's Board:")
-        self.display_board(self.cpu_board, is_player=False)
-        
-        while self.user_ammo > 0 and self.cpu_ammo > 0:
-            if self.turn == 'user':
-                self.user_guess(username)
-            else:
-                self.cpu_action(username)
-            self.turn = 'user' if self.turn == 'cpu' else 'cpu'
-            
-            # Check if the current player has run out of ammo or ships
-            if self.user_ammo <= 0 or self.cpu_ammo <= 0 or self.ships_left <= 0:
-                break
-            
-            # Prompt the player to continue, restart, or quit after both players have taken their turns
-            continue_playing = "C"
-            if self.turn == 'user':
-                continue_playing = input("Do you want to continue playing? <C>ontinue, <R>estart, or <Q>uit? >: ").upper()
-            if continue_playing == "Q":
-                self.__init__()
-                username = self.get_username()
-                self.play_game(username)
-            elif continue_playing == "R":
-                self.__init__()
-                self.play_game(username)  # Restart the game
+            player_guessed_coordinates = set()
+            computer_guessed_coordinates = set()
 
-        # Determine game outcome
-        if self.ships_left == self.cpu_board.count("X"):
-            print("It's a tie!")
-        elif self.ships_left < self.cpu_board.count("X"):
-            print(f"{username}, Congratulations, you won!")
-        else:
-            print("CPU won!")
-
-        # Ask to play again or quit
-        self.play_again(username)
-
-    def play_again(self, username):
-        try_again = input(f"Do you want to play again? <Y>es or <N>o? >: ").lower()
-        if try_again == "y":
-            self.__init__()
-            self.play_game(username)
-        else:
-            print(f"Goodbye, {username}!")
-
-if __name__ == "__main__":
-    game = BattleshipGame()
-    username = game.get_username()
-    game.play_game(username)
+            while (
+                self.player_turns > 0
+                and self.computer_turns > 0
+                and self.player_ships > 0
+                and self.computer_ships > 0
+            ):
+                print(f"\n{player_name}'s Board:")
+                self.display_board(self.player_board)
+                print("\nCPU's Board:")
+                self.display_board(self.computer_board, False)
+    
