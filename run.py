@@ -1,11 +1,5 @@
 import random
 
-# ANSI escape codes for colors
-RED = '\033[31m'
-GREEN = '\033[32m'
-BLUE = '\033[34m'
-RESET = '\033[0m'  # Reset color
-
 # the game board as 2D list
 # Constants
 HIT_CHAR = 'X'
