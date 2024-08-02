@@ -1,27 +1,24 @@
 import random
 
-# Constants
-BOARD_SIZE = 7
-INIT_SHIPS = 5
-INIT_AMMO = 15
-
-class Message:
-    welcome = ("Welcome to the Battleship game!\n"
-               "Your main objective is to find and destroy all the hidden ships on the map!\n")
-    instructions = ("\nIntroductions:\n"
-                   f"You have {INIT_AMMO} ammo and there are {INIT_SHIPS} hidden ships on the map.\n"
-                   "In order to hit them, you have to enter specific numbers for that location. For example:\n"
-                   "For the first row and first column, you have to write 1 and 1.\n"
-                   "I wish you good fortune in wars to come!\n")
-
-class BattleshipGame:
+class Board:
     def __init__(self):
-        self.user_ammo = INIT_AMMO
-        self.cpu_ammo = INIT_AMMO
-        self.ships_left = INIT_SHIPS
-        self.turn = 'user'
-        self.game_board = [['_'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
-        self.cpu_board = [['_'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
+        # Initialize the game board with default settings and parameters
+        self.board_size = 7
+        self.ship_size = 5
+        self.player_board = [
+            [" " for _ in range(self.board_size)]
+            for _ in range(self.board_size)
+        ]
+        self.computer_board = [
+            [" " for _ in range(self.board_size)]
+            for _ in range(self.board_size)
+        ]
+        self.player_turns = 15
+        self.computer_turns = 15
+        self.player_ships = 5  # Track remaining ships for each player
+        self.computer_ships = 5
+        self.player_score = 0  # Track the player's score
+        self.computer_score = 0  # Track the computer's score
 
 
     def get_username(self):
