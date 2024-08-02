@@ -36,12 +36,16 @@ def get_username():
             print("Please enter your name.")
 
 
-class Ship:
-    def __init__(self, name, position, size):
-        self.name = name
-        self.position = position
-        self.size = size
-        self.sunk = False
+# Generates random coordinates for placing ships on the board.
+def create_random_ships(num_ships):
+    ship_coordinates = [[random.randrange(BOARD_SIZE), random.randrange(BOARD_SIZE)] for _ in range(num_ships)]
+    return ship_coordinates
+
+# Prints the current state of the game board to the console.
+def display_board(board):
+    for row in board:
+        print(' '.join(row))
+
 
 # game loop  
 class Game: 
