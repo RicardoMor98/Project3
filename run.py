@@ -70,13 +70,12 @@ def check_valid_move(row, column, game_board):
         return False
 
 
-    while not game.is_complete():
-        pos = game.get_guess()
-        result = game.check_guess(pos, game.cpu_board)  # Check guess against CPU board
-        game.update_game(result, pos, game.cpu_board)  # Update game state
-        game.display_board(game.user_board)  # Display updated board
-
-    game_over = game.end_program()  # End program based on user choice
+# Randomly selects a cell on the board for the CPU's guess.
+def cpu_guess():
+    """
+    Generates a random row and column for the CPU's guess.
+    """
+    return random.randrange(BOARD_SIZE), random.randrange(BOARD_SIZE)
 
     print("Goodbye.")
     
