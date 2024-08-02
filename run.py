@@ -74,7 +74,7 @@ def cpu_guess():
 
 # Orchestrates the game flow, including initializing the game board, placing ships, and managing turns between the user and the CPU.
 def play_game(username):
-    global ammo, ships_left, turn
+    global user_ammo, cpu_ammo, ships_left, turn
     turn = 'user'
     game_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
     cpu_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
@@ -85,7 +85,7 @@ def play_game(username):
     
     display_board(game_board)
 
-    while ammo > 0:
+    while user_ammo > 0 and cpu_ammo > 0:
         if turn == 'user':
             row, column = get_user_input(username)
             if row is None:
@@ -101,8 +101,8 @@ def play_game(username):
                 else:
                     print(f"{username}, You missed!\n")
                     game_board[row][column] = "-"
-                    ammo -= 1
-                print(f"Ammo left: {ammo}")
+                    user_ammo -= 1
+                print(f"Ammo left: {user_ammo}")
                 print(f"Ships left: {ships_left}")
                 display_board(game_board)
                 turn = 'cpu'
@@ -122,8 +122,8 @@ def play_game(username):
             else:
                 print(f"\nCPU missed!\n")
                 cpu_board[row][column] = "-"
-                ammo -= 1
-            print(f"Ammo left: {ammo}")
+                cpu_ammo -= 1
+            print(f"Ammo left: {cpu_ammo}")
             print(f"Ships left: {ships_left}")
             display_board(cpu_board)
             turn = 'user'
