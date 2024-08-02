@@ -21,7 +21,7 @@ class Board:
         self.computer_score = 0  # Track the computer's score
 
 
-     def get_username(self):
+    def get_username(self):
         input_is_valid = False
         username = ""
         while input_is_valid is False:
@@ -31,7 +31,7 @@ class Board:
             else:
                 input_is_valid = True
                 username = user_input
-        return username
+            return username
 
     def display_board(self, board, is_player=True):
         # Display the game board, including player's and computer's boards
