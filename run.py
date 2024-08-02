@@ -161,3 +161,8 @@ def play_again(username):
         play_game(username)
     else:
         print(f"Goodbye, {username}!"
+
+# start a game using the username
+        if __name__ == "__main__":
+    username = get_username()
+    play_game(username)
