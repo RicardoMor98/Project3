@@ -136,3 +136,14 @@ def play_game(username):
             display_board(game_board)
             display_board(cpu_board)
             turn = 'user'
+
+# Determine game outcome
+    if ships_left == cpu_board.count("X"):
+        print("It's a tie!")
+    elif ships_left < cpu_board.count("X"):
+        print(f"{username}, Congratulations, you won!")
+    else:
+        print("CPU won!")
+
+    # Ask to play again or quit
+    play_again(username)
