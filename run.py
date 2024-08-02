@@ -1,170 +1,183 @@
 import random
 
 # Constants
-BOARD_SIZE = 5
-INIT_SHIPS = 3
-INIT_AMMO = 10
+BOARD_SIZE = 7
+INIT_SHIPS = 5
+INIT_AMMO = 15
 
-# This class defines two static string variables, welcome and instructions, which are used to greet the player and provide game instructions.
 class Message:
     welcome = ("Welcome to the Battleship game!\n"
-               "Your main objective is to find and destroy all the hidden ships on map!\n")
+               "Your main objective is to find and destroy all the hidden ships on the map!\n")
     instructions = ("\nIntroductions:\n"
-                     f"You have {INIT_AMMO} ammo and there are {INIT_SHIPS} hidden ships on map.\n"
-                     "In order to hit them, you have to enter specific numbers for that location. For example:\n"
-                     "For the first row and first column, you have to write 1 and 1.\n"
-                     "I wish you good fortune in wars to come!\n")
+                   f"You have {INIT_AMMO} ammo and there are {INIT_SHIPS} hidden ships on the map.\n"
+                   "In order to hit them, you have to enter specific numbers for that location. For example:\n"
+                   "For the first row and first column, you have to write 1 and 1.\n"
+                   "I wish you good fortune in wars to come!\n")
 
-# Global Variables
-user_ammo = INIT_AMMO
-cpu_ammo = INIT_AMMO
-ships_left = INIT_SHIPS
-turn = 'user'
+class BattleshipGame:
+    def __init__(self):
+        self.user_ammo = INIT_AMMO
+        self.cpu_ammo = INIT_AMMO
+        self.ships_left = INIT_SHIPS
+        self.turn = 'user'
+        self.game_board = [['_'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
+        self.cpu_board = [['_'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
 
-# Prompts the user for their name at the start of the game.
-def get_username():
-    """
-    Function getting username for welcome message
-    """
-    while True:
-        user_name = input(Message.welcome + "\nEnter your name: ")
-        if user_name:
-            print(f"Welcome to the Battleship game, {user_name}!")
-            return user_name
-        else:
-            print("Please enter your name.")
 
-# Generates random coordinates for placing ships on the board.
-def create_random_ships(num_ships):
-    ship_coordinates = [[random.randrange(BOARD_SIZE), random.randrange(BOARD_SIZE)] for _ in range(num_ships)]
-    return ship_coordinates
-
-# Prints the current state of the game board to the console.
-def display_board(board, show_cpu=False):
-    # Display the game board
-    print("   0 1 2 3 4")
-    for i, row in enumerate(board):
-        if show_cpu and not is_player:  # Check if it's the computer's board and hide the ships
-            row = [" " if cell == "@" else cell for cell in row]
-        print(f"{i} |{'|'.join(row)}|")
-
-    if show_cpu:
-        print("\nCPU'S board")
-        for row in cpu_board:
-            if not is_player:  # Hide the ships on the CPU's board as well
-                row = [" " if cell == "@" else cell for cell in row]
-            print(' '.join(row))
-
-# Captures the user's guess for a ship's location.
-def get_user_input(username):
-    while True:
-        try:
-            row = int(input(f"{username}, Enter a row number between 1-{BOARD_SIZE}: ")) - 1
-            column = int(input(f"{username}, Enter a column number between 1-{BOARD_SIZE}: ")) - 1
-            if row >= 0 and row < BOARD_SIZE and column >= 0 and column < BOARD_SIZE:
-                return row, column
+    def get_username(self):
+        while True:
+            user_name = input(Message.welcome + "\nEnter your name: ")
+            if user_name:
+                print(f"Welcome to the Battleship game, {user_name}!")
+                return user_name
             else:
-                raise ValueError("Row or Column is out of bounds.")
-        except ValueError as ve:
-            print("Invalid input. Please enter numbers within the board size.", ve)
+                print("Please enter your name.")
 
-# Validates whether a move is valid (within the board boundaries and not previously guessed).
-def check_valid_move(row, column, game_board):
-    if (game_board[row][column] != "X") and (game_board[row][column] != "-"):
-        return True
-    else:
-        print("You have already shot that place!")
-        return False
-
-# Randomly selects a cell on the board for the CPU's guess.
-def cpu_guess():
+    def place_user_ships(self):
     """
-    Generates a random row and column for the CPU's guess.
+    Place user's ships based on user input.
     """
-    return random.randrange(BOARD_SIZE), random.randrange(BOARD_SIZE)
+    for _ in range(INIT_SHIPS):
+        while True:
+            row = int(input(f"Enter the row number for ship {_+1}: "))
+            column = int(input(f"Enter the column number for ship {_+1}: "))
+            if row >= 0 and row < BOARD_SIZE and column >= 0 and column < BOARD_SIZE and self.game_board[row][column] == '_':
+                self.game_board[row][column] = "S"
+                break
+            else:
+                print("Invalid position. Please choose another spot.")
 
-# Orchestrates the game flow, including initializing the game board, placing ships, and managing turns between the user and the CPU.
-def play_game(username):
-    global user_ammo, cpu_ammo, ships_left, turn
-    turn = 'user'
-    game_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
-    cpu_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
-    ship_coordinates = create_random_ships(INIT_SHIPS)
-    ships_left = INIT_SHIPS
+    def display_board(self, board, is_player=True, label=""):
+        print(label.center(50))  # Adjusted center width for better alignment
+        print("   0 1 2 3 4 5 6 ")
+        for i, row in enumerate(board):
+            if not is_player:
+                row = [" " if cell == "S" else cell for cell in row]
+            print(f"{i} |{'|'.join(row)}|")
+            
 
-    print(Message.instructions.format(user_ammo=user_ammo, INIT_SHIPS=ships_left))
-    
-    display_board(game_board)
+    def place_ships(self, board, ships):
+        for _ in range(ships):
+            row = random.randint(1, BOARD_SIZE - 1)
+            col = random.randint(1, BOARD_SIZE - 1)
+            while board[row][col] == "S":
+                row = random.randint(0, BOARD_SIZE - 1)
+                col = random.randint(0, BOARD_SIZE - 1)
+            board[row][col] = "S"
 
-    while user_ammo > 0 and cpu_ammo > 0:
-        if turn == 'user':
-            row, column = get_user_input(username)
-            if row is None:
-                continue
-            if check_valid_move(row, column, game_board):
-                if [row, column] in ship_coordinates:
-                    print(f"{username}, Boom! You hit! A ship has exploded! You were granted a new ammo!\n")
-                    cpu_board[row][column] = "X"
-                    ships_left -= 1
-                    if ships_left == 0:
-                        print(f"{username}, Congrats, you won!")
-                        play_again(username)
+    def get_user_input(self, username):
+        while True:
+            try:
+                row = int(input(f"{username}, Enter a row number between 0-{BOARD_SIZE - 1}: ")) 
+                column = int(input(f"{username}, Enter a column number between 0-{BOARD_SIZE - 1 }: ")) 
+                if row >= 0 and row < BOARD_SIZE and column >= 0 and column < BOARD_SIZE:
+                    return row, column
                 else:
-                    print(f"{username}, You missed!\n")
-                    cpu_board[row][column] = "-"
-                    user_ammo -= 1
-                print(f"Ammo left: {user_ammo}")
-                print(f"Ships left: {ships_left}")
-                display_board(game_board)
-                turn = 'cpu'
+                    raise ValueError("Row or Column is out of bounds.")
+            except ValueError as ve:
+                print("Invalid input. Please enter numbers within the board size.", ve)
+
+    def check_valid_move(self, row, column, game_board):
+        if (game_board[row][column] != "X") and (game_board[row][column] != "-"):
+            return True
         else:
-            row, column = cpu_guess()
-            if game_board[row][column] == "X" or game_board[row][column] == "-":
-                print("\nCPU has already shot that place!\n")
-                turn = 'user'
-                continue
-            elif [row, column] in ship_coordinates:
-                print(f"\nCPU hit! A ship has exploded!\n")
-                game_board[row][column] = "X"
-                ships_left -= 1
-                if ships_left == 0:
-                    print("CPU won!")
-                    play_again(username)
+            print("You have already shot that place!")
+            return False
+
+    def cpu_guess(self):
+        return random.randrange(BOARD_SIZE), random.randrange(BOARD_SIZE)
+
+    def user_guess(self, username):
+        row, column = self.get_user_input(username)
+        if self.check_valid_move(row, column, self.game_board):
+            if [row, column] in self.create_random_ships(INIT_SHIPS):
+                print(f"{username}, Boom! You hit! A ship has exploded! You were granted a new ammo!\n")
+                self.cpu_board[row][column] = "X"
+                self.ships_left -= 1
+                if self.ships_left == 0:
+                    print(f"{username}, Congrats, you won!")
+                    self.play_again(username)
             else:
-                print(f"\nCPU missed!\n")
-                game_board[row][column] = "-"
-                cpu_ammo -= 1
-            print(f"Ammo left: {cpu_ammo}")
-            print(f"Ships left: {ships_left}")
-            display_board(cpu_board)
-            turn = 'user'
+                print(f"{username}, You missed!\n")
+                self.cpu_board[row][column] = "-"
+                self.user_ammo -= 1
+            print(f"Ammo left: {self.user_ammo}")
+            print(f"Ships left: {self.ships_left}")
+            self.display_board(self.cpu_board, is_player=False, label="CPU's Board:")
+        else:
+            print("Invalid move. Try again.")
 
-    # Determine game outcome
-    if ships_left == cpu_board.count("X"):
-        print("It's a tie!")
-    elif ships_left < cpu_board.count("X"):
-        print(f"{username}, Congratulations, you won!")
-    else:
-        print("CPU won!")
+    def cpu_action(self, username):
+        row, column = self.cpu_guess()
+        if self.cpu_board[row][column] == "X" or self.cpu_board[row][column] == "-":
+            print("\nCPU has already shot that place!\n")
+            self.user_guess(username)
+        elif [row, column] in self.create_random_ships(INIT_SHIPS):
+            print(f"\nCPU hit! A ship has exploded!\n")
+            self.game_board[row][column] = "X"
+            self.ships_left -= 1
+            if self.ships_left == 0:
+                print("CPU won!")
+                self.play_again(username)
+        else:
+            print(f"\nCPU missed!\n")
+            self.game_board[row][column] = "-"
+            self.cpu_ammo -= 1
+        print(f"Ammo left: {self.cpu_ammo}")
+        print(f"Ships left: {self.ships_left}")
+        self.display_board(self.game_board, is_player=True, label=f"{username}'s Board:")
 
-    # Ask to play again or quit
-    play_again(username)
+    def play_game(self, username):
+        self.place_ships(self.game_board, INIT_SHIPS)
+        print(Message.instructions.format(user_ammo=self.user_ammo, INIT_SHIPS=self.ships_left))
+        print("User's Board:")
+        self.display_board(self.game_board)
+        print("\nCPU's Board:")
+        self.display_board(self.cpu_board, is_player=False)
+        
+        while self.user_ammo > 0 and self.cpu_ammo > 0:
+            if self.turn == 'user':
+                self.user_guess(username)
+            else:
+                self.cpu_action(username)
+            self.turn = 'user' if self.turn == 'cpu' else 'cpu'
+            
+            # Check if the current player has run out of ammo or ships
+            if self.user_ammo <= 0 or self.cpu_ammo <= 0 or self.ships_left <= 0:
+                break
+            
+            # Prompt the player to continue, restart, or quit after both players have taken their turns
+            continue_playing = "C"
+            if self.turn == 'user':
+                continue_playing = input("Do you want to continue playing? <C>ontinue, <R>estart, or <Q>uit? >: ").upper()
+            if continue_playing == "Q":
+                self.__init__()
+                username = self.get_username()
+                self.play_game(username)
+            elif continue_playing == "R":
+                self.__init__()
+                self.play_game(username)  # Restart the game
 
-# Asks the user if they want to replay the game. If yes, it resets the game state and restarts the game.
-def play_again(username):
-    global user_ammo, cpu_ammo, ships_left, turn
-    try_again = input(f"Do you want to play again? <Y>es or <N>o? >: ").lower()
-    if try_again == "y":
-        user_ammo = INIT_AMMO
-        cpu_ammo = INIT_AMMO
-        ships_left = INIT_SHIPS
-        turn = 'user'
-        game_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
-        cpu_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
-        play_game(username)
-    else:
-        print(f"Goodbye, {username}!")
+        # Determine game outcome
+        if self.ships_left == self.cpu_board.count("X"):
+            print("It's a tie!")
+        elif self.ships_left < self.cpu_board.count("X"):
+            print(f"{username}, Congratulations, you won!")
+        else:
+            print("CPU won!")
+
+        # Ask to play again or quit
+        self.play_again(username)
+
+    def play_again(self, username):
+        try_again = input(f"Do you want to play again? <Y>es or <N>o? >: ").lower()
+        if try_again == "y":
+            self.__init__()
+            self.play_game(username)
+        else:
+            print(f"Goodbye, {username}!")
 
 if __name__ == "__main__":
-    username = get_username()
-    play_game(username)
+    game = BattleshipGame()
+    username = game.get_username()
+    game.play_game(username)
