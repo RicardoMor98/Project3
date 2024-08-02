@@ -22,14 +22,19 @@ class Message:
                      "I wish you good fortune in wars to come!\n")
 
 
-# Simplified ship sizes
-SHIP_SIZES = {i: 1 for i in range(1, 6)}
+# Prompts the user for their name at the start of the game.
+def get_username():
+    """
+    Function getting username for welcome message
+    """
+    while True:
+        user_name = input(Message.welcome + "\nEnter your name: ")
+        if user_name:
+            print(f"Welcome to the Battleship game, {user_name}!")
+            return user_name
+        else:
+            print("Please enter your name.")
 
-# initialize the board
-USER_BOARD = [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]
-CPU_BOARD = [['.' for _ in range(NUM_COLS)] for _ in range(NUM_ROWS)]
-
-# implementing a ship class
 
 class Ship:
     def __init__(self, name, position, size):
