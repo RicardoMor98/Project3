@@ -1,15 +1,9 @@
 import random
 
-# the game board as 2D list
 # Constants
 BOARD_SIZE = 5
 INIT_SHIPS = 3
 INIT_AMMO = 10
-
-# Global Variables
-ammo = INIT_AMMO
-ships_left = INIT_SHIPS
-turn = 'user'
 
 # This class defines two static string variables, welcome and instructions, which are used to greet the player and provide game instructions.
 class Message:
@@ -21,6 +15,10 @@ class Message:
                      "For the first row and first column, you have to write 1 and 1.\n"
                      "I wish you good fortune in wars to come!\n")
 
+# Global Variables
+ammo = INIT_AMMO
+ships_left = INIT_SHIPS
+turn = 'user'
 
 # Prompts the user for their name at the start of the game.
 def get_username():
@@ -35,7 +33,6 @@ def get_username():
         else:
             print("Please enter your name.")
 
-
 # Generates random coordinates for placing ships on the board.
 def create_random_ships(num_ships):
     ship_coordinates = [[random.randrange(BOARD_SIZE), random.randrange(BOARD_SIZE)] for _ in range(num_ships)]
@@ -45,7 +42,6 @@ def create_random_ships(num_ships):
 def display_board(board):
     for row in board:
         print(' '.join(row))
-
 
 # Captures the user's guess for a ship's location.
 def get_user_input(username):
@@ -60,7 +56,6 @@ def get_user_input(username):
         except ValueError as ve:
             print("Invalid input. Please enter numbers within the board size.", ve)
 
-
 # Validates whether a move is valid (within the board boundaries and not previously guessed).
 def check_valid_move(row, column, game_board):
     if (game_board[row][column] != "X") and (game_board[row][column] != "-"):
@@ -69,7 +64,6 @@ def check_valid_move(row, column, game_board):
         print("You have already shot that place!")
         return False
 
-
 # Randomly selects a cell on the board for the CPU's guess.
 def cpu_guess():
     """
@@ -77,8 +71,6 @@ def cpu_guess():
     """
     return random.randrange(BOARD_SIZE), random.randrange(BOARD_SIZE)
 
-    print("Goodbye.")
-    
 # Orchestrates the game flow, including initializing the game board, placing ships, and managing turns between the user and the CPU.
 def play_game(username):
     global ammo, ships_left, turn
@@ -112,7 +104,6 @@ def play_game(username):
                 print(f"Ammo left: {ammo}")
                 print(f"Ships left: {ships_left}")
                 display_board(game_board)
-                display_board(cpu_board)
                 turn = 'cpu'
         else:
             row, column = cpu_guess()
@@ -133,11 +124,10 @@ def play_game(username):
                 ammo -= 1
             print(f"Ammo left: {ammo}")
             print(f"Ships left: {ships_left}")
-            display_board(game_board)
             display_board(cpu_board)
             turn = 'user'
 
-# Determine game outcome
+    # Determine game outcome
     if ships_left == cpu_board.count("X"):
         print("It's a tie!")
     elif ships_left < cpu_board.count("X"):
@@ -160,9 +150,8 @@ def play_again(username):
         cpu_board = [['O'] * BOARD_SIZE for _ in range(BOARD_SIZE)]
         play_game(username)
     else:
-        print(f"Goodbye, {username}!"
+        print(f"Goodbye, {username}!")
 
-# start a game using the username
-        if __name__ == "__main__":
+if __name__ == "__main__":
     username = get_username()
     play_game(username)
