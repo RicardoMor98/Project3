@@ -6,6 +6,12 @@ BOARD_SIZE = 5
 INIT_SHIPS = 3
 INIT_AMMO = 10
 
+# Global Variables
+ammo = INIT_AMMO
+ships_left = INIT_SHIPS
+turn = 'user'
+
+
 
 # Simplified ship sizes
 SHIP_SIZES = {i: 1 for i in range(1, 6)}
