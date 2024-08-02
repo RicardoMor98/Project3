@@ -82,7 +82,7 @@ class Board:
         print("8. Type 'exit' to quit the game at any time.")
         print("\nI wish you good fortune in wars to come!\n")
 
-def play_game(self):
+    def play_game(self):
         # Main game loop where players take turns and outcomes are determined
         while True:
             self.display_instructions()
@@ -178,3 +178,31 @@ def play_game(self):
                     else:
                         print("\nIt's a draw! Both players have ships remaining.")
 
+                        # Display scores
+                        print(f"""\nScores: {player_name} = {self.player_score}, CPU: {self.computer_score}""")
+
+                    while True:
+                            play_again = input("\nDo you want to play again? (yes/no): ")
+                    if play_again.lower() in ["yes", "no"]:
+                        break
+                    else:
+                        print("Invalid input. Please enter 'yes' or 'no'.")
+
+                    if play_again.lower() != "yes":
+                        print("Thank you for playing! Goodbye.")
+                        break
+                    else:
+                        # Reset the game for a new round
+                        self.reset_game()
+
+        def reset_game(self):
+                    # Reset game parameters for a new round
+                    self.player_board = [ [" " for _ in range(self.board_size)] for _ in range(self.board_size)]
+                    self.computer_board = [[" " for _ in range(self.board_size)] for _ in range(self.board_size)]
+        
+                    self.player_turns = 15
+                    self.computer_turns = 15
+                    self.player_ships = 5
+                    self.computer_ships = 5
+                    self.player_score = 0  # Reset player's score
+                    self.computer_score = 0  # Reset computer's score
