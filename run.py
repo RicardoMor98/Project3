@@ -52,23 +52,19 @@ class Board:
                 col = random.randint(0, self.board_size - 1)
             board[row][col] = "S"
 
-    def get_user_input(self, username):
-        while True:
-            try:
-                row = int(input(f"{username}, Enter a row number between 0-{BOARD_SIZE - 1}: ")) 
-                column = int(input(f"{username}, Enter a column number between 0-{BOARD_SIZE - 1 }: ")) 
-                if row >= 0 and row < BOARD_SIZE and column >= 0 and column < BOARD_SIZE:
-                    return row, column
-                else:
-                    raise ValueError("Row or Column is out of bounds.")
-            except ValueError as ve:
-                print("Invalid input. Please enter numbers within the board size.", ve)
+     def validate_input(self, row, col):
+        # Check if the input coordinates are within the valid range
+        return 0 <= row < self.board_size and 0 <= col < self.board_size
 
-    def check_valid_move(self, row, column, game_board):
-        if (game_board[row][column] != "X") and (game_board[row][column] != "-"):
+    def make_shot(self, board, row, col, player):
+        # Process player's or computer's shot on the board & update accordingly
+        if board[row][col] == "S":
+            print(f"\n{player} Sunk a Battleship!")
+            board[row][col] = "H"
             return True
         else:
-            print("You have already shot that place!")
+            print(f"\n{player} Shot in the ocean!")
+            board[row][col] = "M"
             return False
 
     def cpu_guess(self):
