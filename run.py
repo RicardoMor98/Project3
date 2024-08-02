@@ -2,14 +2,10 @@ import random
 
 # the game board as 2D list
 # Constants
-HIT_CHAR = 'X'
-MISS_CHAR = 'O'
-BLANK_CHAR = '.'
-MAX_MISSES = 20
-NUM_ROWS = 10
-NUM_COLS = 10
-MIN_ROW_LABEL = 'A'
-MAX_ROW_LABEL = 'J'
+BOARD_SIZE = 5
+INIT_SHIPS = 3
+INIT_AMMO = 10
+
 
 # Simplified ship sizes
 SHIP_SIZES = {i: 1 for i in range(1, 6)}
