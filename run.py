@@ -33,36 +33,23 @@ class Board:
                 username = user_input
         return username
 
-    def place_user_ships(self):
-    """
-    Place user's ships based on user input.
-    """
-    for _ in range(INIT_SHIPS):
-        while True:
-            row = int(input(f"Enter the row number for ship {_+1}: "))
-            column = int(input(f"Enter the column number for ship {_+1}: "))
-            if row >= 0 and row < BOARD_SIZE and column >= 0 and column < BOARD_SIZE and self.game_board[row][column] == '_':
-                self.game_board[row][column] = "S"
-                break
-            else:
-                print("Invalid position. Please choose another spot.")
-
-    def display_board(self, board, is_player=True, label=""):
-        print(label.center(50))  # Adjusted center width for better alignment
-        print("   0 1 2 3 4 5 6 ")
+    def display_board(self, board, is_player=True):
+        # Display the game board, including player's and computer's boards
+        print("   0 1 2 3 4 5 6")
         for i, row in enumerate(board):
             if not is_player:
+                # If it's the computer's board, hide the ships
                 row = [" " if cell == "S" else cell for cell in row]
             print(f"{i} |{'|'.join(row)}|")
-            
 
     def place_ships(self, board, ships):
+        # Randomly place ships on the board, ensuring no overlap
         for _ in range(ships):
-            row = random.randint(1, BOARD_SIZE - 1)
-            col = random.randint(1, BOARD_SIZE - 1)
+            row = random.randint(0, self.board_size - 1)
+            col = random.randint(0, self.board_size - 1)
             while board[row][col] == "S":
-                row = random.randint(0, BOARD_SIZE - 1)
-                col = random.randint(0, BOARD_SIZE - 1)
+                row = random.randint(0, self.board_size - 1)
+                col = random.randint(0, self.board_size - 1)
             board[row][col] = "S"
 
     def get_user_input(self, username):
