@@ -99,9 +99,45 @@ def play_game(self):
                 and self.computer_turns > 0
                 and self.player_ships > 0
                 and self.computer_ships > 0
-            ):
+                    ):
                 print(f"\n{player_name}'s Board:")
                 self.display_board(self.player_board)
                 print("\nCPU's Board:")
                 self.display_board(self.computer_board, False)
-    
+
+             while True:
+                    error_m = "You already tried this coordinate. Try again."
+                    message = "Enter row (0-6) or type 'exit' to quit: "
+                    row_input = input(message)
+                    if row_input.lower() == "exit":
+                        break
+
+                    col_input = input("Enter column (0-6): ")
+
+                    try:
+                        row = int(row_input)
+                        col = int(col_input)
+
+                        if not self.validate_input(row, col):
+                            print("Invalid coordinates. Try again.")
+                            continue
+
+                        if (row, col) in player_guessed_coordinates:
+                            print(error_m)
+                            continue
+
+                        player_guessed_coordinates.add((row, col))
+
+                        player_hit = self.make_shot(self.computer_board,
+                                                    row, col, player_name)
+                        if player_hit:
+                            self.computer_ships -= 1
+                            self.player_score += 1  # Update player's score
+
+                        break
+
+                    except ValueError:
+                        print("Invalid input. Please enter a number.")
+
+                if row_input.lower() == "exit":
+                    break
