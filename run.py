@@ -60,7 +60,6 @@ class Game:
     # Main game loop where the game is played
     def play(self):
         print("Welcome to Battleship!")  # Introductory message
-        print("Destroy all enemy ships in 15 turns.\n")
         print("Your main objective is to find and destroy all the hidden ships on the map!\n")
         print("How to play:")
         print("1. The game consists of two boards, one for each player.")
@@ -131,9 +130,9 @@ class Game:
         self.show_board(self.c_board)  # Display computer's final board
 
         # Determine who won based on the number of hits
-        if self.p_hits == self.ships:
+        if self.p_hits > self.c_hits:
             print(f"\nCongrats, {name}! You sank all the computer's ships!")
-        elif self.c_hits == self.ships:
+        elif self.c_hits > self.p_hits:
             print("\nThe computer sank all your ships. Better luck next time!")
         else:
             print("\nIt's a draw!")  # In case of a tie
