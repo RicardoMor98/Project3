@@ -1,32 +1,47 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Battleship Game
 
-Welcome,
+My 3rd Project for Code Institute's Diploma in Full Stack Software Development. Based of a classic board game Battleship now turn into digital form using Python.
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **May 14, 2024**
+User can run the game into the Code Institute's mock terminal on Heroku.
 
-## Reminders
+The live link - 
 
-- Your code must be placed in the `run.py` file
-- Your dependencies must be placed in the `requirements.txt` file
-- Do not edit any of the other files or your code may not deploy properly
 
-## Creating the Heroku app
+## How to play
 
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
+1. The game consists of two boards, one for each player.
 
-1. `heroku/python`
-2. `heroku/nodejs`
+2. The boards are marked with the numbers 0 - 6.
 
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
+3. You have a total of 15 turns to sink 5 hidden ships.
+4. Guess a row and a column between 0 and 6.
 
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
+5. If you HIT a ship, you will see 'H'.
 
-Connect your GitHub repository and deploy as normal.
+6. If you MISS a ship, you will see 'M'.
 
-## Constraints
+7. Your ships are displayed as 'S'.
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
 
----
+## Site Owner Goals 
 
-Happy coding!
+- Use the game as part of a portfolio to show what has been learned. 
+
+- Make sure players have a great time playing the game.
+
+- Create features that make players want to keep using the game.
+
+
+## User Stories
+
+- Clear Instructions on how to input coordinates.
+
+- Appealing visuality of the game so it becomes more enjoyable the game.
+
+- Be able to see my score and computer (CPU) score. 
+
+- Quit option in case i need to leave the game, providing flexibility in my gaming experience.
+
+- Play again option in case want to try different strategies to win the game.
+
+
