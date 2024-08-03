@@ -1,10 +1,12 @@
 # Battleship Game
 
+![Battleshipmain](images/maingame.png)
+
 My 3rd Project for Code Institute's Diploma in Full Stack Software Development. Based of a classic board game Battleship now turn into digital form using Python.
 
 User can run the game into the Code Institute's mock terminal on Heroku.
 
-The live link - 
+## ## [Live Game](https://battleshipp3-e7fcc5bb8bba.herokuapp.com/)
 
 
 ## How to play
@@ -212,6 +214,12 @@ These steps were taken for the deployment:
 - Scroll down to the bottom of the page and there you can choose if you want the deploys to be Automatic or Manually. The Manually deployed branches needs redepolying each time the repository is updated. 
 
 - Click "View" to see the live site. 
+
+## ## [Live Game](https://battleshipp3-e7fcc5bb8bba.herokuapp.com/)
+
+## ## [Live site - Github](https://github.com/RicardoMor98/Project3)
+
+## ## [Live site - Heroku](https://dashboard.heroku.com/apps/battleshipp3)
 
 ## Credits
 
