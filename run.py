@@ -16,49 +16,47 @@ class Game:
 
 
 # Username Input ensures that the user enters a valid username with at least 3 characters
-    def get_username(self):
+    def get_name(self):
         while True:
-            username = input("Enter your username: ")
-            if len(username) < 3:
-                print("Please enter a minimum of 3 chars")
-            else:
-                return username
+            name = input("Enter your name: ")
+            if len(name) >= 3:
+                return name
+            print("Name must be at least 3 characters.")
 
 # Display Board this method displays the board in a readable format
-    def display_board(self, board, is_player=True):
-        print("   0 1 2 3 4 5 6")
+    def show_board(self, board, hide_ships=False):
+        print("   " + " ".join(map(str, range(self.size))))
         for i, row in enumerate(board):
-            if not is_player:
-                row = [" " if cell == "S" else cell for cell in row]
-            print(f"{i} |{'|'.join(row)}|")
+            display_row = [" " if hide_ships and cell == "S" else cell for cell in row]
+            print(f"{i} |" + "|".join(display_row) + "|")
 
 # Placing Ships randomly places ships ('S') on the board ensures no two ships occupy the same spot
-    def place_ships(self, board, ships):
-        for _ in range(ships):
-            row, col = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)
-            while board[row][col] == "S":
-                row, col = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)
-            board[row][col] = "S"
+   def place_ships(self, board):
+        for _ in range(self.ships):
+            r, c = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
+            while board[r][c] == "S":
+                r, c = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
+            board[r][c] = "S"
 
 # Input Validation validates that the entered coordinates (row and column) are within the board boundaries
-    def validate_input(self, row, col):
-        return 0 <= row < self.board_size and 0 <= col < self.board_size
+    def is_valid(self, r, c):
+        return 0 <= r < self.size and 0 <= c < self.size
 
-# Shooting Logic handles the logic for making a shot 
-    def make_shot(self, board, row, col, player):
-        if board[row][col] == "S": # If a ship is hit ('S')
-            print(f"\n{player} Sunk a Battleship!")
-            board[row][col] = "H" # it's marked as 'H' (hit)
+# Handle the logic for firing at a specific board position 
+    def fire(self, board, r, c, player):
+        if board[r][c] == "S":
+            print(f"{player} hit a ship!")
+            board[r][c] = "H"
             return True
         else:
-            print(f"\n{player} Shot in the ocean!")
-            board[row][col] = "M" # it's marked as 'M' (miss)
+            print(f"{player} missed.")
+            board[r][c] = "M"
             return False
 
-# Instructions provides the user with instructions on how to play the game
-    def display_instructions(self):
-        print("Welcome to the Battleship game!\n"
-              "Your main objective is to find and destroy all the hidden ships on the map!\n")
+# Main Loop the game runs in a loop until either the player or computer runs out of turns or loses all ships
+    def play(self):
+        print("Welcome to Battleship!")
+        print("Your main objective is to find and destroy all the hidden ships on the map!\n")
         print("How to play:")
         print("1. The game consists of two boards, one for each player.")
         print("2. The boards are marked with the numbers 0 - 6.")
@@ -70,115 +68,66 @@ class Game:
         print("8. Type 'exit' to quit the game at any time.")
         print("\nI wish you good fortune in wars to come!\n")
 
-# Main Loop the game runs in a loop until either the player or computer runs out of turns or loses all ships
-    def play_game(self):
-        self.display_instructions()
-        player_name = self.get_username()
+        name = self.get_name()
+        self.place_ships(self.p_board)
+        self.place_ships(self.c_board)
 
-        self.place_ships(self.player_board, self.player_ships)
-        self.place_ships(self.computer_board, self.computer_ships)
-
-        player_guessed_coordinates = set()
-        computer_guessed_coordinates = set()
+        p_guesses = set()
+        c_guesses = set()
+# Loop continues as long as both players have turns left and haven't sunk all ships
+        while self.p_turns > 0 and self.c_turns > 0 and self.p_hits < self.ships and self.c_hits < self.ships:
+            print(f"\n{name}'s Board:")
+            self.show_board(self.p_board)
+            print("\nComputer's Board:")
+            self.show_board(self.c_board, hide_ships=True)
 
 # Player Turn the player inputs row and column values to guess the location of the computer's ships
-        while (
-            self.player_turns > 0
-            and self.computer_turns > 0
-            and self.player_ships > 0
-            and self.computer_ships > 0
-        ):
-            print(f"\n{player_name}'s Board:")
-            self.display_board(self.player_board)
-            print("\nCPU's Board:")
-            self.display_board(self.computer_board, False)
-#  The input is validated to ensure it's within the board and not a repeated guess
-            while True:
-                row_input = input("Enter row (0-6) or type 'exit' to quit: ") 
-                if row_input.lower() == "exit":
-                    return
-
-                col_input = input("Enter column (0-6): ")
-
-                try:
-                    row = int(row_input)
-                    col = int(col_input)
-
-                    if not self.validate_input(row, col):
-                        print("Invalid coordinates. Try again.")
-                        continue
-
-                    if (row, col) in player_guessed_coordinates:
-                        print("You already tried this coordinate. Try again.")
-                        continue
-
-                    player_guessed_coordinates.add((row, col))
-                    player_hit = self.make_shot(self.computer_board, row, col, player_name)
-
-                    if player_hit:
-                        self.computer_ships -= 1
-                        self.player_score += 1
-                    break
-
-                except ValueError:
-                    print("Invalid input. Please enter a number.")
-# Computer Turn the computer randomly selects a position to attack on the player's board
-            comp_row, comp_col = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)
-
-            while (comp_row, comp_col) in computer_guessed_coordinates:
-                comp_row, comp_col = random.randint(0, self.board_size - 1), random.randint(0, self.board_size - 1)
-
-            computer_guessed_coordinates.add((comp_row, comp_col))
-            comp_hit = self.make_shot(self.player_board, comp_row, comp_col, 'CPU')
-# The program checks to make sure the guess hasn't been made before and processes the hit or miss.
-            if comp_hit:
-                self.player_ships -= 1
-                self.computer_score += 1
-
-            self.player_turns -= 1
-            self.computer_turns -= 1
-
-            print(f"""\nTurns left: {player_name} = {self.player_turns}, CPU = {self.computer_turns}
-Scores:     {player_name} = {self.player_score}, CPU = {self.computer_score}""")
-# End Game after the main loop ends
-        print("\nGame Over!")
-        print(f"{player_name}'s Board:")
-        self.display_board(self.player_board)
-        print("\nCPU's Board:")
-        self.display_board(self.computer_board, is_player=False)
-# the game checks who the winner is, displays the final boards, and the results
-        if self.player_ships == 0:
-            print("\nSorry, better luck next time. CPU sunk all your ships!")
-        elif self.computer_ships == 0:
-            print(f"\nCongratulations, {player_name}! You sunk all the CPU's ships!")
-        else:
-            print("\nIt's a draw! Both players have ships remaining.")
-
-        print(f"\nScores: {player_name} = {self.player_score}, CPU: {self.computer_score}")
-# Replay Option
         while True:
-            play_again = input("\nDo you want to play again? (yes/no): ")
-            if play_again.lower() in ["yes", "no"]:
-                break
-            else:
-                print("Invalid input. Please enter 'yes' or 'no'.")
+                try:
+                    r = int(input("Enter row (0-6) or 'exit' to quit: "))
+                    c = int(input("Enter column (0-6): "))
+# Validate the coordinates and check if they were already guessed
+                    if not self.is_valid(r, c) or (r, c) in p_guesses:
+                        print("Invalid or repeated guess. Try again.")
+                        continue
 
-        if play_again.lower() == "yes":
-            self.reset_game()
-            self.play_game()
+                    p_guesses.add((r, c))
+                    if self.fire(self.c_board, r, c, name):
+                        self.p_hits += 1
+                    break
+                except ValueError:
+                    print("Please enter valid numbers.")
+ # Computer's turn to randomly guess coordinates
+            c_r, c_c = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
+            while (c_r, c_c) in c_guesses:
+                c_r, c_c = random.randint(0, self.size - 1), random.randint(0, self.size - 1)
+            c_guesses.add((c_r, c_c))
+
+            if self.fire(self.p_board, c_r, c_c, "Computer"):
+                self.c_hits += 1
+# Decrease remaining turns after each round
+            self.p_turns -= 1
+            self.c_turns -= 1
+# Display remaining turns and current scores
+            print(f"\nTurns left: {self.p_turns} | {name}'s hits: {self.p_hits} | Computer's hits: {self.c_hits}")
+
+        self.end_game(name)
+ # Determine the game outcome and offer a replay option
+             def end_game(self, name):
+        print("\nGame Over!")
+        self.show_board(self.p_board)
+        self.show_board(self.c_board)
+ # Determine who won based on the number of hits
+        if self.p_hits == self.ships:
+            print(f"\nCongrats, {name}! You sank all the computer's ships!")
+        elif self.c_hits == self.ships:
+            print("\nThe computer sank all your ships. Better luck next time!")
         else:
-            print("Thank you for playing! Goodbye.")
-
-    def reset_game(self):
-        self.player_board = [[" " for _ in range(self.board_size)] for _ in range(self.board_size)]
-        self.computer_board = [[" " for _ in range(self.board_size)] for _ in range(self.board_size)]
-        self.player_turns = 15
-        self.computer_turns = 15
-        self.player_ships = 5
-        self.computer_ships = 5
-        self.player_score = 0
-        self.computer_score = 0
-
+            print("\nIt's a draw!")
+# Offer the player a chance to replay the game
+        if input("\nPlay again? (yes/no): ").lower() == "yes":
+            self.__init__()
+            self.play()
+# Start the game if the script is run directly
 if __name__ == "__main__":
-    game = Board()
-    game.play_game()
+    Game().play()
