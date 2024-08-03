@@ -1,24 +1,19 @@
 import random
 
-# Class and Initializes the board size, ship size, and sets up two 7x7 grids
-class Board:
+class Game:
     def __init__(self):
-        self.board_size = 7
-        self.ship_size = 5
-        self.player_board = [
-            [" " for _ in range(self.board_size)]
-            for _ in range(self.board_size)
-        ]
-        self.computer_board = [
-            [" " for _ in range(self.board_size)]
-            for _ in range(self.board_size)
-        ]
-        self.player_turns = 15
-        self.computer_turns = 15
-        self.player_ships = 5
-        self.computer_ships = 5
-        self.player_score = 0
-        self.computer_score = 0
+        # Initialize the game parameters
+        self.size = 7 
+        self.ships = 5  
+        # Initialize the boards for the player and the computer
+        self.p_board = [[" " for _ in range(self.size)] for _ in range(self.size)]
+        self.c_board = [[" " for _ in range(self.size)] for _ in range(self.size)]
+        # Set the initial number of turns and hits
+        self.p_turns = 15  
+        self.c_turns = 15  
+        self.p_hits = 0  
+        self.c_hits = 0  
+
 
 # Username Input ensures that the user enters a valid username with at least 3 characters
     def get_username(self):
